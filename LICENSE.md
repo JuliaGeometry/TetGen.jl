@@ -1,4 +1,4 @@
-The TetGen.jl package is licensed under the MIT "Expat" License:
+The following copyright license applies to the TetGen.jl code only; see the tetgen.dependency package for the copyright and licensing information of TetGen itself (which is also free/open-source, but under the AGPL).
 
 > Copyright (c) 2015: Simon Danisch.
 >
