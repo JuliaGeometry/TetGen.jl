@@ -33,8 +33,8 @@ end
 run(`$tetgen -pq1.2AaY $(abspath(meshfile))`)
 nodes, elements = read_mesh(pwd(), "sphere.1")
 
-@test length(nodes) == 1014
-@test length(elements) == 4621
+@test length(nodes) == 1036
+@test length(elements) == 4730
 
 # function to_triangle(triangles, tetra)
 #     tetra = tetra
