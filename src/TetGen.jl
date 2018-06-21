@@ -9,6 +9,9 @@ else
     error("Tetgen not build correctly. Please run Pkg.build(\"TetGen\")")
 end
 
+function __init__()
+    ENV["LD_LIBRARY_PATH"] = ENV["LD_LIBRARY_PATH"] * joinpath(Base.JULIA_HOME, "..", "lib")
+end
 
 # Holes
 # Region
