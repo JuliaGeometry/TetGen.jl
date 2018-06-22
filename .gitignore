@@ -1,2 +1,7 @@
 *.jl.cov
 *.jl.mem
+*.smesh
+*.node
+*.face
+*.ele
+*.edge
