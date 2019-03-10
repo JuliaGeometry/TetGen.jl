@@ -5,3 +5,4 @@
 *.face
 *.ele
 *.edge
+deps/build.log

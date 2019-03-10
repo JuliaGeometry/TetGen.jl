@@ -1,75 +1,39 @@
 using TetGen
-using Base.Test
-using Base.Iterators
-using GeometryTypes
-
-tetgen = TetGen.tetgen
+using Test
+using TetGen: JLPolygon, JLTetgenIO, JLFacet, Point
 
 
-
-cd(@__DIR__)
-
-meshfile = abspath("sphere.smesh")
-sphere = GLNormalMesh(Sphere(Point3f0(0), 1f0))
-using Colors
-
-spheres = [
-    (Sphere(Point3f0(0), 2f0), RGBA(0, 1, 0, 0.1)),
-    (Sphere(Point3f0(0), 1f0), RGBA(0, 0, 0, 0.4))
-]
-
-mesh1 = map(GLNormalMesh, spheres)
-combined = merge(mesh1...)
-#
-# scene = Scene()
-# Makie.wireframe(GLNormalMesh(combined))
-#
-# mesh2 = HomogenousMesh(Sphere(Point3f0(0), 1f0), color = RGBA(0, 0, 0, 1))
-
-open(meshfile, "w") do io
-    export_smesh(io, sphere)
+points = zeros(8 * 3)
+points[[4, 7, 8, 11]]  .= 2;  # node 2.
+# Set node 5, 6, 7, 8.
+for i in 4:7
+  points[i * 3 + 1] = points[(i - 4) * 3 + 1];
+  points[i * 3 + 1 + 1] = points[(i - 4) * 3 + 1 + 1];
+  points[i * 3 + 2 + 1] = 12;
 end
 
-run(`$tetgen -pq1.2AaY $(abspath(meshfile))`)
-nodes, elements = read_mesh(pwd(), "sphere.1")
+# Facet 1. The leftmost JLFacet.
+polygons = [
+    JLPolygon(Cint[1:4;]),
+    JLPolygon(Cint[5:8;]),
+    JLPolygon(Cint[1,5,6,2]),
+    JLPolygon(Cint[2,6,7,3]),
+    JLPolygon(Cint[3, 7, 8, 4]),
+    JLPolygon(Cint[4, 8, 5, 1])
+]
 
-@test nodes isa AbstractVector
-@test elements isa AbstractVector
+facetlist = JLFacet.(polygons)
 
-# function to_triangle(triangles, tetra)
-#     tetra = tetra
-#     push!(triangles, GLTriangle(tetra[1], tetra[2], tetra[3]))
-#     push!(triangles, GLTriangle(tetra[2], tetra[3], tetra[4]))
-#     push!(triangles, GLTriangle(tetra[2], tetra[3], tetra[4]))
-#     push!(triangles, GLTriangle(tetra[3], tetra[1], tetra[4]))
-# end
-#
-#
-# function to_lines(lines, tetra)
-#     tetra = tetra
-#     push!(lines, tetra[1], tetra[2])
-#     push!(lines, tetra[2], tetra[3])
-#     push!(lines, tetra[3], tetra[4])
-#     push!(lines, tetra[2], tetra[4])
-#     push!(lines, tetra[1], tetra[4])
-# end
+facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
 
-#
-# triangles = GLTriangle[]
-#
-# for elem in elements
-#     if nodes[elem[1]][1] > 0
-#         to_triangle(triangles, elem)
-#     end
-# end
-#
-# using Makie
-#
-# scene = Scene()
-# mesh = GLPlainMesh(nodes, triangles)
-# Makie.wireframe(mesh, color = (:black, 0.4))
-# Makie.mesh(mesh, color = (:red, 0.1))
-#
-#
-# Makie.scatter(nodes, markersize = 0.01)
-# Makie.lines(nodes)
+tio = JLTetgenIO(
+    collect(reinterpret(Point{3, Float64}, points)),
+    facets = facetlist,
+    facetmarkers = facetmarkerlist,
+)
+
+result = tetrahedralize(tio, "vpq1.414a0.1")
+
+points = rand(Point{3, Float64}, 100)
+
+result = tetrahedralize(JLTetgenIO(points), "vw")
