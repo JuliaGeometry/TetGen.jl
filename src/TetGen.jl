@@ -2,7 +2,9 @@ module TetGen
 
 const depsfile = joinpath(@__DIR__, "..", "deps", "deps.jl")
 using GeometryBasics
-using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line, Simplex, connect, Triangle, NSimplex, Tetrahedron, TupleView, TriangleFace, SimplexFace, LineString, Mesh
+using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
+    Simplex, connect, Triangle, NSimplex, Tetrahedron,
+    TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP
 
 
 if isfile(depsfile)
@@ -18,15 +20,16 @@ end
 include("cppwrapper.jl")
 
 
-function tetrahedralize(io::JLTetgenIO{Float64}, command::String)
+function tetrahedralize(io::TetgenIO{Float64}, command::String)
     cres = ccall((:tetrahedralizef64, libtet), CPPTetgenIO{Float64}, (CPPTetgenIO{Float64}, Cstring), io, command)
-    return convert(JLTetgenIO, cres)
+    return convert(TetgenIO, cres)
 end
 
-function tetrahedralize(io::JLTetgenIO{Float32}, command::String)
+function tetrahedralize(io::TetgenIO{Float32}, command::String)
     cres = ccall((:tetrahedralizef32, libtet), CPPTetgenIO{Float32}, (CPPTetgenIO{Float32}, Cstring), io, command)
-    return convert(JLTetgenIO, cres)
+    return convert(TetgenIO, cres)
 end
+include("meshes.jl")
 
 
 export tetrahedralize

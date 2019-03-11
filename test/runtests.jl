@@ -1,7 +1,6 @@
 using TetGen
-using Test
-using TetGen: JLPolygon, JLTetgenIO, JLFacet, Point
-
+using TetGen: JLPolygon, TetgenIO, JLFacet, Point
+using GeometryBasics: Mesh, Triangle, Tetrahedron
 
 points = zeros(8 * 3)
 points[[4, 7, 8, 11]]  .= 2;  # node 2.
@@ -26,14 +25,47 @@ facetlist = JLFacet.(polygons)
 
 facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
 
-tio = JLTetgenIO(
+tio = TetgenIO(
     collect(reinterpret(Point{3, Float64}, points)),
     facets = facetlist,
     facetmarkers = facetmarkerlist,
 )
 
 result = tetrahedralize(tio, "vpq1.414a0.1")
+GC.gc()
+# Extract surface triangle mesh:
+Mesh{Triangle}(result)
+# Extract volume Tetrahedron mesh:
+Mesh{Tetrahedron}(result)
 
 points = rand(Point{3, Float64}, 100)
 
-result = tetrahedralize(JLTetgenIO(points), "vw")
+result = tetrahedralize(TetgenIO(points), "w")
+GC.gc()
+result = tetrahedralize(TetgenIO(points), "w")
+GC.gc()
+Mesh{Triangle}(result)
+
+
+
+using GeometryTypes
+
+s1 = Sphere{Float64}(Point{3}(0.0), 1.0)
+s2 = Sphere{Float64}(Point{3}(0.0), 2.0)
+
+a, b = PlainMesh{Float64, Face{3, Cint}}.((s1, s2))
+bmesh = merge(a, b)
+
+facetlist = map(faces(bmesh)) do face
+    JLFacet(JLPolygon([face...]))
+end
+
+markers = [fill(Cint(0), length(faces(a))); fill(Cint(1), length(faces(b)));]
+tio = TetgenIO(
+    collect(reinterpret(TetGen.Point{3, Float64}, vertices(bmesh))),
+    facets = facetlist,
+    facetmarkers = markers,
+)
+result = tetrahedralize(tio, "vpq1.414a0.1")
+Mesh{Triangle}(result)
+Mesh{Tetrahedron}(result)

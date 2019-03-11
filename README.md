@@ -33,7 +33,7 @@ facetlist = JLFacet.(polygons)
 
 facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
 
-tio = JLTetgenIO(
+tio = TetgenIO(
     collect(reinterpret(Point{3, Float64}, points)),
     facets = facetlist,
     facetmarkers = facetmarkerlist,
