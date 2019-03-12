@@ -13,12 +13,12 @@ end
 
 # Facet 1. The leftmost JLFacet.
 polygons = [
-    JLPolygon(Cint[1:4;]),
-    JLPolygon(Cint[5:8;]),
-    JLPolygon(Cint[1,5,6,2]),
-    JLPolygon(Cint[2,6,7,3]),
-    JLPolygon(Cint[3, 7, 8, 4]),
-    JLPolygon(Cint[4, 8, 5, 1])
+    Cint[1:4;],
+    Cint[5:8;],
+    Cint[1,5,6,2],
+    Cint[2,6,7,3],
+    Cint[3, 7, 8, 4],
+    Cint[4, 8, 5, 1]
 ]
 
 facetlist = JLFacet.(polygons)
@@ -31,12 +31,26 @@ tio = TetgenIO(
     facetmarkers = facetmarkerlist,
 )
 
+yy = Base.cconvert(TetGen.CPPTetgenIO{Float64}, tio)
+xx = Base.unsafe_convert(TetGen.CPPTetgenIO{Float64}, yy)
+GC.gc(true)
+
 result = tetrahedralize(tio, "vpq1.414a0.1")
-GC.gc()
 # Extract surface triangle mesh:
-Mesh{Triangle}(result)
 # Extract volume Tetrahedron mesh:
-Mesh{Tetrahedron}(result)
+tetra = Mesh{Tetrahedron}(result)
+tio = TetgenIO(
+    tetra.simplices.points,
+    tetrahedrons = tetra.simplices.faces
+)
+result = tetrahedralize(tio, "p")
+tmesh = Mesh{Triangle}(result)
+using Makie, GeometryTypes
+
+gmesh = GLNormalMesh(Point3f0.(tmesh.simplices.points), GLTriangle.(tmesh.simplices.faces))
+mesh(gmesh)
+
+
 
 points = rand(Point{3, Float64}, 100)
 
@@ -48,24 +62,25 @@ Mesh{Triangle}(result)
 
 
 
-using GeometryTypes
+using GeometryTypes, FileIO, GLMakie
+using TetGen
+using TetGen: JLPolygon, TetgenIO, JLFacet, Point, CPolygon, CPPTetgenIO
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace
 
-s1 = Sphere{Float64}(Point{3}(0.0), 1.0)
-s2 = Sphere{Float64}(Point{3}(0.0), 2.0)
-
-a, b = PlainMesh{Float64, Face{3, Cint}}.((s1, s2))
-bmesh = merge(a, b)
-
+bmesh = load(GLMakie.GLVisualize.assetpath("cat.obj"), PlainMesh{Float64, Face{3, Cint}})
 facetlist = map(faces(bmesh)) do face
-    JLFacet(JLPolygon([face...]))
+    JLFacet([Cint.(face)...])
 end
 
-markers = [fill(Cint(0), length(faces(a))); fill(Cint(1), length(faces(b)));]
 tio = TetgenIO(
-    collect(reinterpret(TetGen.Point{3, Float64}, vertices(bmesh))),
+    TetGen.Point{3, Float64}.(vertices(bmesh)),
     facets = facetlist,
-    facetmarkers = markers,
+    facetmarkers = fill(Cint(0), length(facetlist))
 )
-result = tetrahedralize(tio, "vpq1.414a0.1")
-Mesh{Triangle}(result)
+
+result = tetrahedralize(tio, "d")
+x = Mesh{Triangle}(result)
 Mesh{Tetrahedron}(result)
+using Makie
+
+GLNormalMesh(Point3f0.(x.simplices.points))

@@ -4,7 +4,8 @@ const depsfile = joinpath(@__DIR__, "..", "deps", "deps.jl")
 using GeometryBasics
 using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
     Simplex, connect, Triangle, NSimplex, Tetrahedron,
-    TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP
+    TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP,
+    NgonFace, Ngon
 
 
 if isfile(depsfile)
