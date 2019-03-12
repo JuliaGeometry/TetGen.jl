@@ -2,15 +2,12 @@ using TetGen
 using TetGen: JLPolygon, TetgenIO, JLFacet, Point
 using GeometryBasics: Mesh, Triangle, Tetrahedron
 
-points = zeros(8 * 3)
-points[[4, 7, 8, 11]]  .= 2;  # node 2.
-# Set node 5, 6, 7, 8.
-for i in 4:7
-  points[i * 3 + 1] = points[(i - 4) * 3 + 1];
-  points[i * 3 + 1 + 1] = points[(i - 4) * 3 + 1 + 1];
-  points[i * 3 + 2 + 1] = 12;
-end
-
+points = Point{3, Float64}[
+    (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
+    (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
+    (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
+    (2.0, 2.0, 12.0), (0.0, 2.0, 12.0)
+]
 # Facet 1. The leftmost JLFacet.
 polygons = [
     Cint[1:4;],
@@ -31,6 +28,7 @@ tio = TetgenIO(
     facetmarkers = facetmarkerlist,
 )
 
+<<<<<<< Updated upstream
 yy = Base.cconvert(TetGen.CPPTetgenIO{Float64}, tio)
 xx = Base.unsafe_convert(TetGen.CPPTetgenIO{Float64}, yy)
 GC.gc(true)
@@ -84,3 +82,42 @@ Mesh{Tetrahedron}(result)
 using Makie
 
 GLNormalMesh(Point3f0.(x.simplices.points))
+=======
+result = tetrahedralize(tio, "pq1.414a0.1")
+
+points = rand(Point{3, Float64}, 100)
+
+result = TetGen.voronoi(points)
+
+using GeometryTypes
+
+s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
+
+x = PlainMesh{Float64, Triangle{Cint}}(s)
+
+s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 1.0)
+
+y = PlainMesh{Float64, Triangle{Cint}}(s)
+
+
+meshy = merge(x, y)
+
+using Statistics
+retype(::Type{T}, x) where T = collect(reinterpret(T, x))
+attr = [fill(Cint(0), length(vertices(x))); fill(Cint(0), length(vertices(y)));]
+p = mean(vertices(meshy))
+
+tio = JLTetgenIO(
+    retype(TetGen.Point{3, Float64}, vertices(meshy)),
+    trifaces = retype(TetGen.TriangleFace{Cint}, faces(meshy)),
+    # pointmarkers = attr,
+    # regions = [TetGen.Region(TetGen.Point(p...), -2.0, 0.01)]
+)
+
+result = tetrahedralize(tio, "pq")
+
+
+using Makie
+
+mesh(meshy)
+>>>>>>> Stashed changes

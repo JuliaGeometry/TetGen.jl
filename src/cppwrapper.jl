@@ -123,8 +123,8 @@ inttype(::Type{Float32}) = Int32
 
 struct TetgenIO{T, NSimplex, NAttributes, NMTr, IT, A}
     points::Vector{Point{3, T}}
-    pointattributes::Vector{NTuple{NAttributes, T}}
-    pointmtrs::Vector{NTuple{NMTr, T}}
+    pointattributes::Vector{SVector{NAttributes, T}}
+    pointmtrs::Vector{SVector{NMTr, T}}
     pointmarkers::Vector{Cint}
 
     tetrahedra::Vector{SimplexFace{NSimplex, Cint}}
@@ -197,8 +197,8 @@ end
 
 function TetgenIO(
         points::Vector{Point{3, T}};
-        pointattributes = NTuple{0, T}[],
-        pointmtrs = NTuple{0, T}[],
+        pointattributes = SVector{0, T}[],
+        pointmtrs = SVector{0, T}[],
         pointmarkers = Cint[],
         tetrahedrons = SimplexFace{4, Cint}[],
         tetrahedronattributes = T[],
@@ -365,4 +365,15 @@ end
 
 function Base.unsafe_convert(::Type{CPPTetgenIO{T}}, x::Tuple{CPPTetgenIO{T}, Vector{Any}}) where T
     return x[1]
+end
+
+
+function tetrahedralize(io::JLTetgenIO{Float64}, command::String)
+    cres = ccall((:tetrahedralizef64, libtet), CPPTetgenIO{Float64}, (CPPTetgenIO{Float64}, Cstring), io, command)
+    return convert(JLTetgenIO, cres)
+end
+
+function tetrahedralize(io::JLTetgenIO{Float32}, command::String)
+    cres = ccall((:tetrahedralizef32, libtet), CPPTetgenIO{Float32}, (CPPTetgenIO{Float32}, Cstring), io, command)
+    return convert(JLTetgenIO, cres)
 end

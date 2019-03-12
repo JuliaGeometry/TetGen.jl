@@ -7,6 +7,7 @@ using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
     TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP,
     NgonFace, Ngon
 
+using StaticArrays
 
 if isfile(depsfile)
     include(depsfile)
@@ -19,18 +20,8 @@ function __init__()
 end
 
 include("cppwrapper.jl")
-
-
-function tetrahedralize(io::TetgenIO{Float64}, command::String)
-    cres = ccall((:tetrahedralizef64, libtet), CPPTetgenIO{Float64}, (CPPTetgenIO{Float64}, Cstring), io, command)
-    return convert(TetgenIO, cres)
-end
-
-function tetrahedralize(io::TetgenIO{Float32}, command::String)
-    cres = ccall((:tetrahedralizef32, libtet), CPPTetgenIO{Float32}, (CPPTetgenIO{Float32}, Cstring), io, command)
-    return convert(TetgenIO, cres)
-end
 include("meshes.jl")
+include("api.jl")
 
 
 export tetrahedralize
