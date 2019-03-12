@@ -1,33 +1,29 @@
 using TetGen
 using TetGen: JLPolygon, TetgenIO, JLFacet, Point
-using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace
 using GeometryBasics
-points = GeometryBasics.Point{3, Float64}[
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace
+
+points = Point{3, Float64}[
     (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
     (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
     (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
     (2.0, 2.0, 12.0), (0.0, 2.0, 12.0)
 ]
-TetgenIO(points)
 
 # Facet 1. The leftmost JLFacet.
-polygons = [
-    Cint[1:4;],
-    Cint[5:8;],
-    Cint[1,5,6,2],
-    Cint[2,6,7,3],
-    Cint[3, 7, 8, 4],
-    Cint[4, 8, 5, 1]
+facets = QuadFace{Cint}[
+    1:4,
+    5:8,
+    [1,5,6,2],
+    [2,6,7,3],
+    [3, 7, 8, 4],
+    [4, 8, 5, 1]
 ]
 
-facetlist = JLFacet.(polygons)
-
 facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
-TetgenIO(points)
-
 tio = TetgenIO(
     points,
-    facets = facetlist,
+    facets = facets,
     facetmarkers = facetmarkerlist,
 )
 
