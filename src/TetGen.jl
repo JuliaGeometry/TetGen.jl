@@ -5,7 +5,7 @@ using GeometryBasics
 using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
     Simplex, connect, Triangle, NSimplex, Tetrahedron,
     TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP,
-    NgonFace, Ngon
+    NgonFace, Ngon, faces, coordinates
 
 using StaticArrays
 

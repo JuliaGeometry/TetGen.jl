@@ -1,13 +1,15 @@
 using TetGen
 using TetGen: JLPolygon, TetgenIO, JLFacet, Point
-using GeometryBasics: Mesh, Triangle, Tetrahedron
-
-points = Point{3, Float64}[
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace
+using GeometryBasics
+points = GeometryBasics.Point{3, Float64}[
     (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
     (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
     (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
     (2.0, 2.0, 12.0), (0.0, 2.0, 12.0)
 ]
+TetgenIO(points)
+
 # Facet 1. The leftmost JLFacet.
 polygons = [
     Cint[1:4;],
@@ -21,17 +23,13 @@ polygons = [
 facetlist = JLFacet.(polygons)
 
 facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
+TetgenIO(points)
 
 tio = TetgenIO(
-    collect(reinterpret(Point{3, Float64}, points)),
+    points,
     facets = facetlist,
     facetmarkers = facetmarkerlist,
 )
-
-<<<<<<< Updated upstream
-yy = Base.cconvert(TetGen.CPPTetgenIO{Float64}, tio)
-xx = Base.unsafe_convert(TetGen.CPPTetgenIO{Float64}, yy)
-GC.gc(true)
 
 result = tetrahedralize(tio, "vpq1.414a0.1")
 # Extract surface triangle mesh:
@@ -82,7 +80,6 @@ Mesh{Tetrahedron}(result)
 using Makie
 
 GLNormalMesh(Point3f0.(x.simplices.points))
-=======
 result = tetrahedralize(tio, "pq1.414a0.1")
 
 points = rand(Point{3, Float64}, 100)
@@ -107,7 +104,7 @@ retype(::Type{T}, x) where T = collect(reinterpret(T, x))
 attr = [fill(Cint(0), length(vertices(x))); fill(Cint(0), length(vertices(y)));]
 p = mean(vertices(meshy))
 
-tio = JLTetgenIO(
+tio = TetgenIO(
     retype(TetGen.Point{3, Float64}, vertices(meshy)),
     trifaces = retype(TetGen.TriangleFace{Cint}, faces(meshy)),
     # pointmarkers = attr,
@@ -120,4 +117,24 @@ result = tetrahedralize(tio, "pq")
 using Makie
 
 mesh(meshy)
->>>>>>> Stashed changes
+
+
+using TetGen
+using TetGen: JLPolygon, TetgenIO, JLFacet, Point, CPPTetgenIO
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace
+using GeometryBasics
+import GeometryTypes
+s = GeometryTypes.Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
+
+x = GeometryTypes.PlainMesh{Float64, GeometryTypes.Face{3, Cint}}(s)
+
+points = Point{3, Float64}.(GeometryTypes.vertices(x))
+f = TriangleFace{Cint}.(GeometryTypes.faces(x))
+m = Mesh(points, f)
+
+tio = TetgenIO(GeometryBasics.coordinates(m); facets = GeometryBasics.faces(m))
+
+tetrahedralize(tio, "Qp")
+
+
+TetGen.tetrahedralize(m)
