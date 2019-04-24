@@ -1,8 +1,5 @@
+*.jl.*.cov
 *.jl.cov
 *.jl.mem
-*.smesh
-*.node
-*.face
-*.ele
-*.edge
-deps/build.log
+.DS_Store
+/Manifest.toml
