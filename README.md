@@ -5,7 +5,7 @@
 [![Codecov](https://codecov.io/gh/JuliaGeometry/TetGen.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGeometry/TetGen.jl)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-orange.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
 
-The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](wias-berlin.de/software/tetgen/). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tesselation.
+The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://wias-berlin.de/software/index.jsp?id=TetGen&lang=1. This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tesselation.
 
 ## Example
 
