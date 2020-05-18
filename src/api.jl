@@ -9,8 +9,8 @@ function TetGen.tetrahedralize(
     )
     f = faces(mesh)
     kw_args = Any[:facets => metafree(f)]
-    if hascolumn(f, marker)
-        push!(kw_args, :facetmarkers => getcolumn(f, marker))
+    if hasproperty(f, marker)
+        push!(kw_args, :facetmarkers => getproperty(f, marker))
     end
     tio = TetgenIO(coordinates(mesh); kw_args...)
     result = tetrahedralize(tio, command)
