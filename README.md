@@ -10,42 +10,43 @@ The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://
 ## Example
 
 ```julia
+using TetGen
+using TetGen: TetgenIO
+using GeometryBasics
+using GeometryBasics: Mesh, QuadFace
 
-points = zeros(8 * 3)
-points[[4, 7, 8, 11]]  .= 2;  # node 2.
-# Set node 5, 6, 7, 8.
-for i in 4:7
-  points[i * 3 + 1] = points[(i - 4) * 3 + 1];
-  points[i * 3 + 1 + 1] = points[(i - 4) * 3 + 1 + 1];
-  points[i * 3 + 2 + 1] = 12;
-end
-
-# Facet 1. The leftmost JLFacet.
-polygons = [
-    JLPolygon(Cint[1:4;]),
-    JLPolygon(Cint[5:8;]),
-    JLPolygon(Cint[1,5,6,2]),
-    JLPolygon(Cint[2,6,7,3]),
-    JLPolygon(Cint[3, 7, 8, 4]),
-    JLPolygon(Cint[4, 8, 5, 1])
+# Construct a cube out of Quads
+points = Point{3, Float64}[
+    (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
+    (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
+    (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
+    (2.0, 2.0, 12.0), (0.0, 2.0, 12.0)
 ]
 
-facetlist = JLFacet.(polygons)
+facets = QuadFace{Cint}[
+    1:4,
+    5:8,
+    [1,5,6,2],
+    [2,6,7,3],
+    [3, 7, 8, 4],
+    [4, 8, 5, 1]
+]
 
-facetmarkerlist = Cint[-1, -2, 0, 0, 0, 0]
+markers = Cint[-1, -2, 0, 0, 0, 0]
+# attach some additional information to our faces!
+mesh = Mesh(points, meta(facets, markers=markers))
+result = tetrahedralize(mesh, "vpq1.414a0.1")
 
-tio = TetgenIO(
-    collect(reinterpret(Point{3, Float64}, points)),
-    facets = facetlist,
-    facetmarkers = facetmarkerlist,
-)
+using GLMakie, AbstractPlotting
 
-result = tetrahedralize(tio, "vpq1.414a0.1")
+GLMakie.mesh(normal_mesh(result), color=(:blue, 0.1), transparency=true)
+GLMakie.wireframe!(result)
+
 ```
 
 Plotted with Makie:
 
-![image](https://user-images.githubusercontent.com/1010467/54118458-5abd9a80-43f3-11e9-99e8-951d36b8a81f.png)
+![image](https://user-images.githubusercontent.com/1010467/82307971-69252000-99c1-11ea-8b82-e3a206381bd3.png)
 
 
 ## [Contributing](https://github.com/JuliaGeometry/TetGen.jl/blob/master/CONTRIBUTING.md)   
