@@ -5,10 +5,10 @@ end
 
 function TetGen.tetrahedralize(
         mesh::Mesh{3, Float64, <: TetGen.Ngon}, command = "Qp";
-        marker = :markers
+        marker = :markers, holes = TetGen.Point{3, Float64}[]
     )
     f = faces(mesh)
-    kw_args = Any[:facets => metafree(f)]
+    kw_args = Any[:facets => metafree(f),:holes => holes]
     if hasproperty(f, marker)
         push!(kw_args, :facetmarkers => getproperty(f, marker))
     end
