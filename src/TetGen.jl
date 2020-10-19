@@ -1,6 +1,6 @@
 module TetGen
-using TetGen_jll
 
+using TetGen_jll
 using GeometryBasics
 using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
     Simplex, connect, Triangle, NSimplex, Tetrahedron,
@@ -10,7 +10,8 @@ using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
 using StaticArrays
 
 
-include("cppwrapper.jl")
+include("cpptetgenio.jl")
+include("jltetgenio.jl")
 include("meshes.jl")
 include("api.jl")
 

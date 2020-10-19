@@ -1,5 +1,5 @@
 using TetGen
-using TetGen: JLPolygon, TetgenIO, JLFacet, Point
+using TetGen: JLPolygon, JLFacet, Point
 using GeometryBasics
 using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace,
     PointMeta, NgonFaceMeta, meta, faces, metafree
