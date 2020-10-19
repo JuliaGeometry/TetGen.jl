@@ -12,6 +12,7 @@ using StaticArrays
 
 include("cpptetgenio.jl")
 include("jltetgenio.jl")
+include("rawtetgenio.jl")
 include("meshes.jl")
 include("api.jl")
 
