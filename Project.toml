@@ -4,6 +4,7 @@ authors = ["SimonDanisch <sdanisch@gmail.com>", "Juergen Fuhrmann <juergen.fuhrm
 version = "0.2.0"
 
 [deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"

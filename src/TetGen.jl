@@ -1,5 +1,5 @@
 module TetGen
-
+using DocStringExtensions
 using TetGen_jll
 using GeometryBasics
 using GeometryBasics: Polygon, MultiPolygon, Point, LineFace, Polytope, Line,
@@ -18,5 +18,8 @@ include("api.jl")
 
 
 export tetrahedralize
+export RawTetGenIO, facetlist!, RawFacet
+export numberofpoints,numberoftetrahedra,numberoftrifaces,numberofedges
+export volumemesh,surfacemesh
 
 end # module
