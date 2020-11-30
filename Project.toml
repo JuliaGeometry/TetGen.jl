@@ -11,6 +11,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 TetGen_jll = "b47fdcd6-d2c1-58e9-bbba-c1cee8d8c179"
 
 [compat]
+DocStringExtensions = "^0.8"
 GeometryBasics = "0.2, 0.3"
 StaticArrays = "0.11, 0.12"
 TetGen_jll = "^1.5.1"
