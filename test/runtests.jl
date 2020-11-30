@@ -1,5 +1,5 @@
 using TetGen
-using TetGen: JLPolygon, TetgenIO, JLFacet, Point
+using TetGen: JLPolygon, JLFacet, Point
 using GeometryBasics
 using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace,
     PointMeta, NgonFaceMeta, meta, faces, metafree
@@ -48,3 +48,52 @@ result = TetGen.voronoi(points)
 # s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 1.0)
 #
 # y = PlainMesh{Float64, Triangle{Cint}}(s)
+
+include("../examples/examples.jl")
+function generic_test(result::RawTetGenIO)
+    @test volumemesh(result) isa Mesh
+
+    if numberoftrifaces(result)>0
+        @test surfacemesh(result) isa Mesh
+    end
+    
+    buf=IOBuffer()
+    Base.show(buf,result)
+    @test length(buf.data)>0
+    
+    ctio,flist,plist=TetGen.CPPTetGenIO(result)
+    @test ctio.numberofpoints==numberofpoints(result)
+    @test ctio.numberoftetrahedra==numberoftetrahedra(result)
+    @test ctio.numberoftrifaces==numberoftrifaces(result)
+end
+
+result = random_delaunay(npoints=100)
+@test numberofpoints(result)==100
+generic_test(result)
+
+result = cube()
+@test numberofpoints(result)==8
+@test numberoftetrahedra(result)==6
+@test numberofedges(result)==12
+@test numberoftrifaces(result)==12
+generic_test(result)
+
+result = prism()
+@test numberofpoints(result)==8
+@test numberofedges(result)==11
+@test numberoftrifaces(result)==12
+@test numberoftetrahedra(result)==6
+generic_test(result)
+
+
+# exact numbers depend on FP aritmetic and
+# compiler optimizations
+result = material_prism()
+@test numberoftetrahedra(result)>100
+generic_test(result)
+
+result = cutprism()
+@test numberoftetrahedra(result)>100
+generic_test(result)
+
+

@@ -1,17 +1,4 @@
 
-
-struct CPolygon
-  vertexlist::Ptr{Cint}
-  numberofvertices::Cint
-end
-
-struct CFacet{T}
-  polygonlist::Ptr{CPolygon}
-  numberofpolygons::Cint
-  holelist::Ptr{T}
-  numberofholes::Cint
-end
-
 # function Base.cconvert(::Type{Vector{CFacet{T}}}, triangles::Vector{NGonFace{N, Cint}}) where {N, T}
 #     polygons = map(1:length(triangles)) do i
 #         CPolygon(Ptr{Cint}(pointer(triangles, i)), Cint(N))
@@ -21,6 +8,7 @@ end
 #     end
 #     return facets
 # end
+
 
 struct JLFacet{T, A <: AbstractVector{Cint}}
     polygons::Vector{A}
@@ -69,59 +57,13 @@ struct SegmentationConstraint{IT, T}
 end
 
 
-struct CPPTetgenIO{T}
-
-    firstnumber::Cint # 0 or 1, default 0.
-    mesh_dim::Cint # must be 3.
-
-    pointlist::Ptr{T}
-    pointattributelist::Ptr{T}
-    pointmtrlist::Ptr{T}
-
-    pointmarkerlist::Ptr{Cint}
-    numberofpoints::Cint
-    numberofpointattributes::Cint
-    numberofpointmtrs::Cint
-
-    tetrahedronlist::Ptr{Cint}
-    tetrahedronattributelist::Ptr{T}
-    tetrahedronvolumelist::Ptr{T}
-    neighborlist::Ptr{Cint}
-    numberoftetrahedra::Cint
-    numberofcorners::Cint
-    numberoftetrahedronattributes::Cint
-
-    facetlist::Ptr{CFacet{T}}
-    facetmarkerlist::Ptr{Cint}
-    numberoffacets::Cint
-
-    holelist::Ptr{T}
-    numberofholes::Cint
-
-    regionlist::Ptr{T}
-    numberofregions::Cint
-
-    facetconstraintlist::Ptr{T}
-    numberoffacetconstraints::Cint
-
-    segmentconstraintlist::Ptr{T}
-    numberofsegmentconstraints::Cint
-
-    trifacelist::Ptr{Cint}
-    trifacemarkerlist::Ptr{Cint}
-    numberoftrifaces::Cint
-
-    edgelist::Ptr{Cint}
-    edgemarkerlist::Ptr{Cint}
-    numberofedges::Cint
-end
 
 
 
 inttype(::Type{Float64}) = Int64
 inttype(::Type{Float32}) = Int32
 
-struct TetgenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
+struct JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
     points::Vector{Point{3, T}}
     pointattributes::Vector{SVector{NAttributes, T}}
     pointmtrs::Vector{SVector{NMTr, T}}
@@ -149,7 +91,7 @@ struct TetgenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
     edges::Vector{LineFace{Cint}}
     edgemarkers::Vector{Cint}
 
-    function TetgenIO(
+    function JLTetGenIO(
             points::Vector{Point{3, T}},
             pointattributes::Vector{SVector{NAttributes, T}},
             pointmtrs::Vector{SVector{NMTr, T}},
@@ -195,7 +137,7 @@ struct TetgenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
 
 end
 
-function TetgenIO(
+function JLTetGenIO(
         points::Vector{Point{3, T}};
         pointattributes = SVector{0, T}[],
         pointmtrs = SVector{0, T}[],
@@ -216,7 +158,7 @@ function TetgenIO(
         edgemarkers = Cint[]
 
     ) where T
-    TetgenIO(
+    JLTetGenIO(
         points,
         pointattributes,
         pointmtrs,
@@ -279,20 +221,20 @@ function get_array(io, field::Symbol, Typ)
 end
 
 function Base.convert(
-        IOT::Type{TetgenIO{T, NSimplex, NAttributes, NMTr, IT, A}}, io::CPPTetgenIO{T}
+        IOT::Type{JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, A}}, io::CPPTetGenIO{T}
     ) where {T, NSimplex, NAttributes, NMTr, IT, A}
-    TetgenIO(ntuple(fieldcount(IOT)) do i
+    JLTetGenIO(ntuple(fieldcount(IOT)) do i
         fname, ftype = fieldname(IOT, i), fieldtype(IOT, i)
         get_array(io, fname, eltype(ftype))
     end...)
 end
 
-function Base.convert(::Type{TetgenIO}, io::CPPTetgenIO{T}) where T
+function Base.convert(::Type{JLTetGenIO}, io::CPPTetGenIO{T}) where T
     NSimplex = Int(io.numberofcorners)
     NAttributes = Int(io.numberofpointattributes)
     NMTr = Int(io.numberofpointmtrs)
     IT = inttype(T) # TODO these are indices,
-    convert(TetgenIO{T, NSimplex, NAttributes, NMTr, IT, Vector{CFacet{T}}}, io)
+    convert(JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, Vector{CFacet{T}}}, io)
 end
 
 
@@ -342,7 +284,7 @@ function unsafe_array_convert(P::Type{Ptr{T1}}, x::Vector{T2}) where {T1, T2}
     Ptr{T1}(Base.unsafe_convert(Ptr{T2}, x))
 end
 
-function Base.cconvert(CIO::Type{CPPTetgenIO{T}}, obj::TetgenIO{T, NSimplex, NAttributes, NMTr, IT, A}) where {T, NSimplex, NAttributes, NMTr, IT, A}
+function Base.cconvert(CIO::Type{CPPTetGenIO{T}}, obj::JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, A}) where {T, NSimplex, NAttributes, NMTr, IT, A}
     cfnames = fieldnames(CIO)
     dict = Dict{Symbol, Any}(
         :numberofpointattributes => NAttributes,
@@ -379,20 +321,16 @@ function Base.cconvert(CIO::Type{CPPTetgenIO{T}}, obj::TetgenIO{T, NSimplex, NAt
         end
     end
     fields_tuple = getindex.((dict,), cfnames)
-    return (CPPTetgenIO{T}(fields_tuple...), gc_tack_cconvert)
+    return (CPPTetGenIO{T}(fields_tuple...), gc_tack_cconvert)
 end
 
-function Base.unsafe_convert(::Type{CPPTetgenIO{T}}, x::Tuple{CPPTetgenIO{T}, Vector{Any}}) where T
+function Base.unsafe_convert(::Type{CPPTetGenIO{T}}, x::Tuple{CPPTetGenIO{T}, Vector{Any}}) where T
     return x[1]
 end
 
 
-function tetrahedralize(io::TetgenIO{Float64}, command::String)
-    cres = ccall((:tetrahedralizef64, libtet), CPPTetgenIO{Float64}, (CPPTetgenIO{Float64}, Cstring), io, command)
-    return convert(TetgenIO, cres)
-end
 
-function tetrahedralize(io::TetgenIO{Float32}, command::String)
-    cres = ccall((:tetrahedralizef32, libtet), CPPTetgenIO{Float32}, (CPPTetgenIO{Float32}, Cstring), io, command)
-    return convert(TetgenIO, cres)
+function tetrahedralize(input::JLTetGenIO{Float64}, command::String)
+    cres = ccall((:tetrahedralizef64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring), input, command)
+    return convert(JLTetGenIO, cres)
 end

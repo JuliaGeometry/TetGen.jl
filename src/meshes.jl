@@ -1,7 +1,7 @@
 using GeometryBasics: Triangle, Tetrahedron, Mesh, Polytope
 
 """
-    Mesh{Tetrahedron}(result::TetgenIO)
+    Mesh{Tetrahedron}(result::JLTetGenIO)
 
 Extracts the *tetrahedral* mesh from `tetgenio`.
 Can also be called with extra information, e.g.:
@@ -11,7 +11,7 @@ Can also be called with extra information, e.g.:
     Mesh{Simplex{NDim, T, Edges, PointType}}(tetio)
 ```
 
-    Mesh{Triangle}(result::TetgenIO)
+    Mesh{Triangle}(result::JLTetGenIO)
 
 Extracts the triangular *surface* mesh from `tetgenio`.
 Can also be called with extra information, e.g.:
@@ -21,16 +21,16 @@ Can also be called with extra information, e.g.:
     Mesh{Ngon{NDim, T, 3, PointType}}(tetio)
 ```
 """
-function GeometryBasics.Mesh{P}(x::TetgenIO{T}) where {P <: Polytope{N, T} where {N, T}, T}
+function GeometryBasics.Mesh{P}(x::JLTetGenIO{T}) where {P <: Polytope{N, T} where {N, T}, T}
     Mesh{Polytope(P, Point{3, T})}(x)
 end
 
 
-function GeometryBasics.Mesh{TetrahedronP{ET, P}}(x::TetgenIO) where {ET, P}
+function GeometryBasics.Mesh{TetrahedronP{ET, P}}(x::JLTetGenIO) where {ET, P}
     Mesh(convert(Vector{P}, x.points), x.tetrahedra)
 end
 
 
-function GeometryBasics.Mesh{TriangleP{3, ET, P}}(x::TetgenIO) where {ET, P}
+function GeometryBasics.Mesh{TriangleP{3, ET, P}}(x::JLTetGenIO) where {ET, P}
     Mesh(convert(Vector{P}, x.points), x.trifaces)
 end
