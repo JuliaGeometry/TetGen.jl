@@ -33,6 +33,26 @@ points = rand(Point{3, Float64}, 100)
 result = TetGen.voronoi(points)
 @test result isa Mesh
 
+
+tetpoints = Point{3, Float64}[
+    (0.0, 0.0, 0.0),
+    (1.0, 0.0, 0.0),
+    (0.0, 1.0, 0.0),
+    (0.0, 0.0, 1.0)
+]
+
+tetfacets = TriangleFace{Cint}[
+    [1,2,3],
+    [1,2,4],
+    [1,3,4],
+    [2,3,4]
+]
+
+tetmesh=Mesh(tetpoints,tetfacets)
+result = tetrahedralize(tetmesh,"pQqAa0.01")
+@test result isa Mesh
+
+
 # s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
 #
 # x = PlainMesh{Float64, Triangle{Cint}}(s)
