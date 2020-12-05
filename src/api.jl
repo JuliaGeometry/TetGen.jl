@@ -14,7 +14,7 @@ end
 """
 $(SIGNATURES)
 
-Tetrahedralize a mesh of polygons with optimal facet markers.
+Tetrahedralize a mesh of polygons with optional facet markers.
 Returns a mesh of tetrahdra.
 """
 function TetGen.tetrahedralize(
