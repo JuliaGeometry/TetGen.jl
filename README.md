@@ -1,6 +1,6 @@
 # TetGen
 
-[![Build status](https://github.com/JuliaGeometry/TetGen.jl/workflows/CI/badge.svg)](https://github.com/JuliaGeometry/TetGen.jl/actions)
+[![Build status](https://github.com/JuliaGeometry/TetGen.jl/workflows/linux-macos-windows/badge.svg)](https://github.com/JuliaGeometry/TetGen.jl/actions)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/JuliaGeometry/TetGen.jl?svg=true)](https://ci.appveyor.com/project/JuliaGeometry/TetGen-jl)
 [![Codecov](https://codecov.io/gh/JuliaGeometry/TetGen.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGeometry/TetGen.jl)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-orange.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
