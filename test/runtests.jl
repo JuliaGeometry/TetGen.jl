@@ -98,6 +98,7 @@ result = cube()
 @test numberoftrifaces(result)==12
 generic_test(result)
 
+
 result = prism()
 @test numberofpoints(result)==8
 @test numberofedges(result)==11
@@ -114,6 +115,11 @@ generic_test(result)
 
 # exact numbers depend on FP aritmetic and
 # compiler optimizations
+
+result = cube_localref()
+generic_test(result)
+
+
 result = material_prism()
 @test numberoftetrahedra(result)>100
 generic_test(result)
