@@ -329,8 +329,11 @@ function Base.unsafe_convert(::Type{CPPTetGenIO{T}}, x::Tuple{CPPTetGenIO{T}, Ve
 end
 
 
-
 function tetrahedralize(input::JLTetGenIO{Float64}, command::String)
-    cres = ccall((:tetrahedralizef64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring), input, command)
+    rc=Cint[0]
+    cres = ccall((:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}), input, command,rc)
+    if rc[1]!=0
+        throw(TetGenError(rc[1]))
+    end
     return convert(JLTetGenIO, cres)
 end
