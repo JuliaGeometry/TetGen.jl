@@ -57,5 +57,80 @@ struct CPPTetGenIO{T}
     numberofedges::Cint
 end
 
-tetrahedralize(input::CPPTetGenIO{Float64}, command::String)=ccall((:tetrahedralizef64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring), input, command)
+"""
+   Error struct for TetGen
+"""
+struct TetGenError <: Exception
+    rc::Cint
+end
 
+"""
+   Show TetGen error, messages have been lifted
+   from TetGen 
+"""
+function Base.show(io::IO, e::TetGenError)
+    if e.rc==1
+        println(io,"TetGen error $(e.rc): out of memory."); 
+    elseif e.rc==2
+        println(io,"TetGen error $(e.rc): internal error.")
+    elseif e.rc==3
+        println(io,"TetGen error $(e.rc): a self-intersection was detected. Hint: use -d option to detect all self-intersections."); 
+    elseif e.rc==4
+        println(io,"TetGen error $(e.rc): a very small input feature size was detected. Hint: use -T option to set a smaller tolerance.")
+    elseif e.rc==5
+        println(io,"TetGen error $(e.rc): two very close input facets were detected. Hint: use -Y option to avoid adding Steiner points in boundary.\n");
+    elseif e.rc==10
+        println(io,"TetGen error $(e.rc): an input error was detected.\n"); 
+    else
+        println(io,"TetGen error $(e.rc): unknown error.\n"); 
+    end    
+end
+
+
+"""
+$(SIGNATURES)
+
+Tetrahedralization with error handling
+"""
+function tetrahedralize(input::CPPTetGenIO{Float64}, command::String)
+    rc=Cint[0]
+    output = ccall((:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring,  Ptr{Cint}), input, command, rc)
+    if rc[1]!=0
+        throw(TetGenError(rc[1]))
+    end
+    output
+end
+
+
+"""
+   Trivial Julia tetunsuitable function
+"""
+my_jl_tetunsuitable=(pa,pb,pc,pd)->0
+
+
+"""
+   Tetunsuitable function called from C wrapper
+"""
+function jl_wrap_tetunsuitable(pa::Ptr{Float64}, pb::Ptr{Float64}, pc::Ptr{Float64}, pd::Ptr{Float64})
+    pax=Base.unsafe_wrap(Array,pa,(3,),own=false)
+    pbx=Base.unsafe_wrap(Array,pb,(3,),own=false)
+    pcx=Base.unsafe_wrap(Array,pc,(3,),own=false)
+    pdx=Base.unsafe_wrap(Array,pd,(3,),own=false)
+    Cint(my_jl_tetunsuitable(pax,pbx,pcx,pdx))
+end
+
+
+"""
+   Set tetunsuitable function called from C wrapper.
+   Setting this function is valid only for one subsequent
+   call to tetrahedralize     
+"""
+function tetunsuitable(unsuitable::Function;check_signature=true)
+    if check_signature
+        unsuitable(rand(3),rand(3),rand(3),rand(3))
+    end
+    global my_jl_tetunsuitable
+    my_jl_tetunsuitable=unsuitable
+    c_wrap_tetunsuitable=@cfunction(jl_wrap_tetunsuitable, Cint, (Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}))
+    ccall((:tetunsuitable_callback,libtet),Cvoid,(Ptr{Cvoid},),c_wrap_tetunsuitable)
+end

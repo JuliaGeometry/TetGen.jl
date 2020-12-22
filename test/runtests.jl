@@ -69,6 +69,11 @@ result = tetrahedralize(tetmesh,"pQqAa0.01")
 #
 # y = PlainMesh{Float64, Triangle{Cint}}(s)
 
+
+
+
+
+
 include("../examples/examples.jl")
 function generic_test(result::RawTetGenIO)
     @test volumemesh(result) isa Mesh
@@ -98,6 +103,7 @@ result = cube()
 @test numberoftrifaces(result)==12
 generic_test(result)
 
+
 result = prism()
 @test numberofpoints(result)==8
 @test numberofedges(result)==11
@@ -106,8 +112,19 @@ result = prism()
 generic_test(result)
 
 
+
+
+
+
+
+
 # exact numbers depend on FP aritmetic and
 # compiler optimizations
+
+result = cube_localref()
+generic_test(result)
+
+
 result = material_prism()
 @test numberoftetrahedra(result)>100
 generic_test(result)
@@ -116,4 +133,105 @@ result = cutprism()
 @test numberoftetrahedra(result)>100
 generic_test(result)
 
+
+
+
+
+
+
+
+function badcube1(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    input.pointlist=[0 0 0;  
+                     1 0 0;
+                     1 1 0;
+                     0 1 0;
+                     0 0 1;  
+                     1 0 2;
+                     1 1 1;
+                     0 1 2]'
+
+    TetGen.facetlist!(input,[1 2 3 4;
+                             5 6 7 8;
+                             1 2 6 5;
+                             2 3 7 6;
+                             3 4 8 7;
+                             4 1 5 8]')
+    tetrahedralize(input, "pQa$(vol)")
+end
+
+function badcube2(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    input.pointlist=[0 0 0;  
+                     1 0 0;
+                     1 1 0;
+                     0 1 0;
+                     0 0 1;  
+                     1 0 1;
+                     1 1 1;
+                     0 1 1;
+                     0 1 1-1.0e-5;
+                     ]'
+
+    TetGen.facetlist!(input,[1 2 3 4;
+                             5 6 7 8;
+                             1 2 6 5;
+                             2 3 7 6;
+                             3 4 8 7;
+                             4 1 5 8]')
+    tetrahedralize(input, "pQa$(vol)")
+end
+
+
+
+function test_catch_error(geom)
+    try
+        result=geom()
+    catch err
+        if typeof(err)==TetGenError
+            println("Catched TetGenError")
+            println(err)
+            return true
+        end
+    end
+    false
+end
+
+@test test_catch_error(badcube2)
+#@test test_catch_error(badcube3)
+
+##############################################
+# Solely for increasing codecov
+
+
+
+input=TetGen.RawTetGenIO{Cdouble}()
+input.pointlist=[0 0 0;  
+                 1 0 0;
+                 1 1 0;
+                 0 1 0;
+                 0 0 1;  
+                 1 0 1;
+                 1 1 1;
+                 0 1 1]'
+
+TetGen.facetlist!(input,[1 2 3 4;
+                         5 6 7 8;
+                         1 2 6 5;
+                         2 3 7 6;
+                         3 4 8 7;
+                         4 1 5 8]')
+
+cinput,x1,x2=TetGen.CPPTetGenIO(input)
+coutput=tetrahedralize(cinput, "pQa")
+
+@test coutput.numberofpoints==8
+
+function test_error_output()
+    for i=1:10 
+        println( TetGenError(i))
+    end
+    true
+end
+@test test_error_output()
 
