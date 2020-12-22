@@ -73,30 +73,6 @@ result = tetrahedralize(tetmesh,"pQqAa0.01")
 
 
 
-input=TetGen.RawTetGenIO{Cdouble}()
-input.pointlist=[0 0 0;  
-                 1 0 0;
-                 1 1 0;
-                 0 1 0;
-                 0 0 1;  
-                 1 0 1;
-                 1 1 1;
-                 0 1 1]'
-
-TetGen.facetlist!(input,[1 2 3 4;
-                         5 6 7 8;
-                         1 2 6 5;
-                         2 3 7 6;
-                         3 4 8 7;
-                         4 1 5 8]')
-
-cinput,x1,x2=TetGen.CPPTetGenIO(input)
-coutput=tetrahedralize(cinput, "pQa")
-
-@test coutput.numberofpoints==8
-
-
-
 
 include("../examples/examples.jl")
 function generic_test(result::RawTetGenIO)
@@ -207,29 +183,6 @@ function badcube2(;vol=1)
 end
 
 
-function badcube3(;vol=1)
-    input=TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist=[0 0 0;  
-                     1 0 0;
-                     1 1 0;
-                     0 1 0;
-                     0 0 1;  
-                     1 0 1;
-                     1 1 1;
-                     0 1 1;
-                     ]'
-
-    TetGen.facetlist!(input,[1 2 3 4;
-                             5 6 7 8;
-                             1 2 6 5;
-                             2 3 7 6;
-                             3 4 8 7;
-                             4 1 5 8;
-                             1 2 8 7;
-                             3 4 6 5;
-                             ]')
-    tetrahedralize(input, "pQa$(vol)q")
-end
 
 function test_catch_error(geom)
     try
@@ -246,4 +199,39 @@ end
 
 @test test_catch_error(badcube2)
 #@test test_catch_error(badcube3)
+
+##############################################
+# Solely for increasing codecov
+
+
+
+input=TetGen.RawTetGenIO{Cdouble}()
+input.pointlist=[0 0 0;  
+                 1 0 0;
+                 1 1 0;
+                 0 1 0;
+                 0 0 1;  
+                 1 0 1;
+                 1 1 1;
+                 0 1 1]'
+
+TetGen.facetlist!(input,[1 2 3 4;
+                         5 6 7 8;
+                         1 2 6 5;
+                         2 3 7 6;
+                         3 4 8 7;
+                         4 1 5 8]')
+
+cinput,x1,x2=TetGen.CPPTetGenIO(input)
+coutput=tetrahedralize(cinput, "pQa")
+
+@test coutput.numberofpoints==8
+
+function test_error_output()
+    for i=1:10 
+        println( TetGenError(i))
+    end
+    true
+end
+@test test_error_output()
 
