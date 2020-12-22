@@ -1,0 +1,9 @@
+coverage:
+  # Define coverage range and precision
+  precision: 2
+  range: "70..100"
+
+# ignore:
+  # - "path/to/folder"  # ignore folders and all its contents
+  # - "test_*.rb"       # wildcards accepted
+  # - "**/*.py"   
