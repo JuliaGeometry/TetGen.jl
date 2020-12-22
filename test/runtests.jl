@@ -106,6 +106,12 @@ result = prism()
 generic_test(result)
 
 
+
+
+
+
+
+
 # exact numbers depend on FP aritmetic and
 # compiler optimizations
 result = material_prism()
@@ -116,4 +122,93 @@ result = cutprism()
 @test numberoftetrahedra(result)>100
 generic_test(result)
 
+
+
+
+
+
+
+
+function badcube1(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    input.pointlist=[0 0 0;  
+                     1 0 0;
+                     1 1 0;
+                     0 1 0;
+                     0 0 1;  
+                     1 0 2;
+                     1 1 1;
+                     0 1 2]'
+
+    TetGen.facetlist!(input,[1 2 3 4;
+                             5 6 7 8;
+                             1 2 6 5;
+                             2 3 7 6;
+                             3 4 8 7;
+                             4 1 5 8]')
+    tetrahedralize(input, "pQa$(vol)")
+end
+
+function badcube2(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    input.pointlist=[0 0 0;  
+                     1 0 0;
+                     1 1 0;
+                     0 1 0;
+                     0 0 1;  
+                     1 0 1;
+                     1 1 1;
+                     0 1 1;
+                     0 1 1-1.0e-5;
+                     ]'
+
+    TetGen.facetlist!(input,[1 2 3 4;
+                             5 6 7 8;
+                             1 2 6 5;
+                             2 3 7 6;
+                             3 4 8 7;
+                             4 1 5 8]')
+    tetrahedralize(input, "pQa$(vol)")
+end
+
+
+function badcube3(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    input.pointlist=[0 0 0;  
+                     1 0 0;
+                     1 1 0;
+                     0 1 0;
+                     0 0 1;  
+                     1 0 1;
+                     1 1 1;
+                     0 1 1;
+                     ]'
+
+    TetGen.facetlist!(input,[1 2 3 4;
+                             5 6 7 8;
+                             1 2 6 5;
+                             2 3 7 6;
+                             3 4 8 7;
+                             4 1 5 8;
+                             1 2 8 7;
+                             3 4 6 5;
+                             ]')
+    tetrahedralize(input, "pQa$(vol)q")
+end
+
+function test_catch_error(geom)
+    try
+        result=geom()
+    catch err
+        if typeof(err)==TetGenError
+            println("Catched TetGenError")
+            println(err)
+            return true
+        end
+    end
+    false
+end
+
+@test test_catch_error(badcube2)
+#@test test_catch_error(badcube3)
 

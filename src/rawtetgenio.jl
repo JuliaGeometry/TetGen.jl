@@ -419,8 +419,7 @@ function CPPTetGenIO(tio::RawTetGenIO{T}) where T
             edgemarkerlist=pointer(tio.edgemarkerlist)
         end            
     end
-    
-    
+
     # Create struct
     CPPTetGenIO{T}(firstnumber,
                    mesh_dim,
@@ -469,10 +468,10 @@ function RawTetGenIO(ctio::CPPTetGenIO{T}) where T
         tio.pointlist = convert(Array{T,2}, Base.unsafe_wrap(Array, ctio.pointlist, (3,Int(ctio.numberofpoints)), own=true))
     end
     if ctio.numberofpointattributes>0  && ctio.pointattributelist!=C_NULL
-        tio.pointattributelist=convert(Array{T,2}, Base.unsafe_wrap(Array, ctio.pointattributelistlist, (Int(ctio.numberofpointattributes),Int(ctio.numberofpoints)), own=true))
+        tio.pointattributelist=convert(Array{T,2}, Base.unsafe_wrap(Array, ctio.pointattributelist, (Int(ctio.numberofpointattributes),Int(ctio.numberofpoints)), own=true))
     end
     if ctio.numberofpointmtrs>0  && ctio.pointmtrlist!=C_NULL
-        tio.pointmtrlist=convert(Array{T,2}, Base.unsafe_wrap(Array, ctio.pointmtrlistlist, (Int(ctio.numberofpointmtrs),Int(ctio.numberofpoints)), own=true))
+        tio.pointmtrlist=convert(Array{T,2}, Base.unsafe_wrap(Array, ctio.pointmtrlist, (Int(ctio.numberofpointmtrs),Int(ctio.numberofpoints)), own=true))
     end
     if ctio.pointmarkerlist!=C_NULL
         tio.pointmarkerlist=convert(Array{Cint,1}, Base.unsafe_wrap(Array, ctio.pointmarkerlist, (Int(ctio.numberofpoints)), own=true))
@@ -626,7 +625,12 @@ Tetrahedralize input.
 """
 function tetrahedralize(input::RawTetGenIO{Float64}, flags::String)
     cinput,flist,plist=CPPTetGenIO(input)
-    coutput = ccall((:tetrahedralizef64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring), cinput, flags)
+    rc=Cint[0]
+    coutput = ccall((:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}),
+                    cinput, flags, rc)
+    if rc[1]!=0
+        throw(TetGenError(rc[1]))
+    end
     RawTetGenIO(coutput)
 end
 
