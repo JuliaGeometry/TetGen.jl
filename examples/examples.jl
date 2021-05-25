@@ -42,6 +42,40 @@ end
 
 
 """
+   cubewithhole(;vol=1)
+
+Tetrahedralization of cube witn maximum tetrahedron volume.
+"""
+function cubewithhole(;vol=1)
+    input=TetGen.RawTetGenIO{Cdouble}()
+    outerpoints=[-1 -1 -1;  
+                 1 -1 -1;
+                 1 1 -1;
+                 -1 1 -1;
+                 -1 -1 1;  
+                 1 -1 1;
+                 1 1 1;
+                 -1 1 1;]'
+
+    input.pointlist=hcat(outerpoints,outerpoints/2)
+
+    outerfacets=[1 2 3 4; 
+                 5 6 7 8; 
+                 1 2 6 5; 
+                 2 3 7 6; 
+                 3 4 8 7; 
+                 4 1 5 8; 
+                 ]'      
+    
+    input.holelist=[0 0 0;]'
+
+    TetGen.facetlist!(input,hcat(outerfacets,outerfacets.+8))
+    tetrahedralize(input, "pQa$(vol)")
+end
+
+
+
+"""
    cube_localref()
 
    Tetrahedralization of cube with local refinement callback

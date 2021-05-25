@@ -103,6 +103,13 @@ result = cube()
 @test numberoftrifaces(result)==12
 generic_test(result)
 
+result = cubewithhole()
+@test numberofpoints(result)==56
+@test numberoftetrahedra(result)==168
+@test numberofedges(result)==36
+@test numberoftrifaces(result)==104
+generic_test(result)
+
 
 result = prism()
 @test numberofpoints(result)==8
