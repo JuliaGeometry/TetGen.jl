@@ -1,7 +1,7 @@
 name = "TetGen"
 uuid = "c5d3f3f7-f850-59f6-8a2e-ffc6dc1317ea"
 authors = ["SimonDanisch <sdanisch@gmail.com>", "Juergen Fuhrmann <juergen.fuhrmann@wias-berlin.de"]
-version = "1.1.1"
+version = "1.2.0"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
