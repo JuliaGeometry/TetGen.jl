@@ -53,6 +53,48 @@ result = tetrahedralize(tetmesh,"pQqAa0.01")
 @test result isa Mesh
 
 
+################# cube with hole example
+# Construct a cube out of Quads
+points = Point{3, Float64}[
+    # outer cube:
+    (-2.0, -2.0, -2.0), (2.0, -2.0, -2.0),
+    (2.0, 2.0, -2.0), (-2.0, 2.0, -2.0),
+    (-2.0, -2.0, 2.0), (2.0, -2.0, 2.0),
+    (2.0, 2.0, 2.0), (-2.0, 2.0, 2.0),
+
+    # inner cube: 
+    (-1.0, -1.0, -1.0), (1.0, -1.0, -1.0),
+    (1.0, 1.0, -1.0), (-1.0, 1.0, -1.0),
+    (-1.0, -1.0, 1.0), (1.0, -1.0, 1.0),
+    (1.0, 1.0, 1.0), (-1.0, 1.0, 1.0),
+]
+
+facets = QuadFace{Cint}[
+    # outer cube:
+    [1,2,3,4],
+    [5,6,7,8],
+    [1,5,6,2],
+    [2,6,7,3],
+    [3,7,8,4],
+    [4,8,5,1],
+
+    # inner cube:
+    [1,2,3,4].+8,
+    [5,6,7,8].+8,
+    [1,5,6,2].+8,
+    [2,6,7,3].+8,
+    [3,7,8,4].+8,
+    [4,8,5,1].+8,
+]
+
+markers = ones(Cint,12)
+mesh = Mesh(points, meta(facets, markers = markers))
+resultx = tetrahedralize(mesh,holes = [Point{3, Float64}(0,0,0)],"pQqAa1.0")
+@test result isa Mesh
+
+
+
+
 # s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
 #
 # x = PlainMesh{Float64, Triangle{Cint}}(s)
