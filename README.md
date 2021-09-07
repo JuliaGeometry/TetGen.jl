@@ -12,7 +12,6 @@ The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://
 
 ```julia
 using TetGen
-using TetGen: TetgenIO
 using GeometryBasics
 using GeometryBasics: Mesh, QuadFace
 
