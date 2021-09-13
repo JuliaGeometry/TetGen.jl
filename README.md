@@ -12,7 +12,6 @@ The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://
 
 ```julia
 using TetGen
-using TetGen: TetgenIO
 using GeometryBasics
 using GeometryBasics: Mesh, QuadFace
 
@@ -38,7 +37,7 @@ markers = Cint[-1, -2, 0, 0, 0, 0]
 mesh = Mesh(points, meta(facets, markers=markers))
 result = tetrahedralize(mesh, "vpq1.414a0.1")
 
-using GLMakie, AbstractPlotting
+using GLMakie
 
 GLMakie.mesh(normal_mesh(result), color=(:blue, 0.1), transparency=true)
 GLMakie.wireframe!(result)
