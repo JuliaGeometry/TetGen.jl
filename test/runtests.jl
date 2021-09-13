@@ -29,6 +29,11 @@ mesh = Mesh(points, meta(facets, markers = markers))
 result = tetrahedralize(mesh)
 @test result isa Mesh
 
+# Make it similar to the README example
+result = tetrahedralize(mesh, "vpq1.414a0.1")
+@test result isa Mesh
+
+
 points = rand(Point{3, Float64}, 100)
 result = TetGen.voronoi(points)
 @test result isa Mesh
