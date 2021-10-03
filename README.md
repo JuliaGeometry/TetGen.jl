@@ -2,7 +2,7 @@
 
 [![Build status](https://github.com/JuliaGeometry/TetGen.jl/workflows/linux-macos-windows/badge.svg)](https://github.com/JuliaGeometry/TetGen.jl/actions)
 [![Codecov](https://codecov.io/gh/JuliaGeometry/TetGen.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGeometry/TetGen.jl)
-[![License: AGPL v3](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/stable)
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/dev)
 
