@@ -2,11 +2,21 @@
 
 [![Build status](https://github.com/JuliaGeometry/TetGen.jl/workflows/linux-macos-windows/badge.svg)](https://github.com/JuliaGeometry/TetGen.jl/actions)
 [![Codecov](https://codecov.io/gh/JuliaGeometry/TetGen.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGeometry/TetGen.jl)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-orange.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/JuliaGeometry/TetGen.jl/blob/master/LICENSE)
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/stable)
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/dev)
 
 The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://wias-berlin.de/software/index.jsp?id=TetGen&lang=1). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tesselation.
+
+If you find TetGen useful, please consider citing
+Hang Si: "TetGen, a Delaunay-Based Quality Tetrahedral Mesh Generator" ACM Trans. on Mathematical Software. 41 (2), 2015
+[http://doi.acm.org/10.1145/2629697](http://doi.acm.org/10.1145/2629697).
+
+## License
+
+When installing TetGen.jl, a compiled library version of the TetGen library will be downloaded from the [TetGen_jll.jl](https://github.com/JuliaBinaryWrappers/TetGen_jll.jl) repository.  This library is bound to the  [Affero Gnu Public License v3 (AGPL)](https://www.gnu.org/licenses/agpl-3.0.html),  but the bindings to the library in this package, TetGen.jl, are licensed under MIT. This means that code using the TetGen library via the TetGen.jl bindings is subject to TetGen's licensing terms. If you distribute covered work, i.e. a program that links to and is distributed with the TetGen library, then that distribution falls under the terms of the AGPLv3.
+
+See the [TetGen Licensing FAQ](http://wias-berlin.de/software/tetgen/1.5/FAQ-license.html) for other options.
 
 ## Example using GeometryBasics datatypes
 

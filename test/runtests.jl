@@ -251,7 +251,7 @@ function test_catch_error(geom)
     false
 end
 
-@test test_catch_error(badcube2)
+#@test test_catch_error(badcube2)
 #@test test_catch_error(badcube3)
 
 ##############################################
