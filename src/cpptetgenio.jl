@@ -81,6 +81,8 @@ function Base.show(io::IO, e::TetGenError)
         println(io,"TetGen error $(e.rc): two very close input facets were detected. Hint: use -Y option to avoid adding Steiner points in boundary.\n");
     elseif e.rc==10
         println(io,"TetGen error $(e.rc): an input error was detected.\n"); 
+    elseif e.rc==101
+        println(io,"TetGen error: unable to load stl file\n"); 
     else
         println(io,"TetGen error $(e.rc): unknown error.\n"); 
     end    
@@ -100,6 +102,7 @@ function tetrahedralize(input::CPPTetGenIO{Float64}, command::String)
     end
     output
 end
+
 
 
 """

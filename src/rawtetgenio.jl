@@ -634,6 +634,21 @@ function tetrahedralize(input::RawTetGenIO{Float64}, flags::String)
     RawTetGenIO(coutput)
 end
 
+"""
+$(SIGNATURES)
+
+Tetrahedralize stl file.
+"""
+function tetrahedralize(stlfile::String, flags::String)
+    base=rsplit(stlfile,".",limit=2)[1]
+    rc=Cint[0]
+    coutput = ccall((:tetrahedralize2_stl_f64, libtet), CPPTetGenIO{Float64}, (Cstring, Cstring,  Ptr{Cint}), base, flags, rc)
+    if rc[1]!=0
+        throw(TetGenError(rc[1]))
+    end
+    RawTetGenIO(coutput)
+end
+
 
 """
 $(TYPEDSIGNATURES)
@@ -642,7 +657,7 @@ Create GeometryBasics.Mesh from the triface list
 (for quick visualization purposes using Makie's wireframe).
 """
 function surfacemesh(tgio::RawTetGenIO)
-    points=[ Point3f0(tgio.pointlist[:,i]...) for i=1:size(tgio.pointlist,2)]
+    points=[ Point3f(tgio.pointlist[:,i]...) for i=1:size(tgio.pointlist,2)]
     faces= [TriangleFace(tgio.trifacelist[:,i]...) for i=1:size(tgio.trifacelist,2)]
     mesh=GeometryBasics.Mesh(points,faces)
 end
@@ -654,7 +669,7 @@ Create GeometryBasics.Mesh of all tetrahedron faces
 (for quick visualization purposes using Makie's wireframe).
 """
 function volumemesh(tgio::RawTetGenIO)
-    points=[ Point3f0(tgio.pointlist[:,i]...) for i=1:size(tgio.pointlist,2)]
+    points=[ Point3f(tgio.pointlist[:,i]...) for i=1:size(tgio.pointlist,2)]
     faces=Array{NgonFace{3,Int32},1}(undef,0)
     tetlist=tgio.tetrahedronlist
     for itet=1:size(tetlist,2)

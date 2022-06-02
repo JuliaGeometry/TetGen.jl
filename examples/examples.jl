@@ -80,7 +80,6 @@ end
 
    Tetrahedralization of cube with local refinement callback
 """
-
 function cube_localref()
 
     tetunsuitable() do pa,pb,pc,pd
@@ -109,8 +108,16 @@ function cube_localref()
 end
 
 
+"""
+   cube_stl()
 
-
+   Tetrahedralization of cube from an stl file
+"""
+function cube_stl()
+    modeldir=joinpath(dirname(pathof(TetGen)),"..","test","surfaceModels")
+    modelfile=joinpath(modeldir,"cube.stl")
+    tetrahedralize(modelfile, "pQa1.0")
+end
 """
    prism(;vol=1)
 
