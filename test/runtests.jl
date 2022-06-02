@@ -6,6 +6,7 @@ using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace,
 using GeometryBasics.StructArrays
 using Test
 
+@testset "mesh based API" begin
 # Construct a cube out of Quads
 points = Point{3, Float64}[
     (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
@@ -116,11 +117,12 @@ resultx = tetrahedralize(mesh,holes = [Point{3, Float64}(0,0,0)],"pQqAa1.0")
 #
 # y = PlainMesh{Float64, Triangle{Cint}}(s)
 
+end
 
 
 
-
-
+@testset "examples.jl" begin
+    
 include("../examples/examples.jl")
 function generic_test(result::RawTetGenIO)
     @test volumemesh(result) isa Mesh
@@ -149,6 +151,15 @@ result = cube()
 @test numberofedges(result)==12
 @test numberoftrifaces(result)==12
 generic_test(result)
+
+result = cube_stl()
+@test numberofpoints(result)==8
+@test numberoftetrahedra(result)==6
+@test numberofedges(result)==12
+@test numberoftrifaces(result)==12
+generic_test(result)
+
+
 
 result = cubewithhole()
 @test numberofpoints(result)==56
@@ -187,13 +198,14 @@ result = cutprism()
 @test numberoftetrahedra(result)>100
 generic_test(result)
 
+end
 
 
 
 
 
-
-
+@testset "error handling" begin
+    
 function badcube1(;vol=1)
     input=TetGen.RawTetGenIO{Cdouble}()
     input.pointlist=[0 0 0;  
@@ -250,14 +262,18 @@ function test_catch_error(geom)
     end
     false
 end
-
-#@test test_catch_error(badcube2)
-#@test test_catch_error(badcube3)
+    #@test test_catch_error(badcube1)
+if !Sys.iswindows()    
+@test test_catch_error(badcube2)
+end
+    
+end
 
 ##############################################
 # Solely for increasing codecov
 
 
+@testset "codecov" begin
 
 input=TetGen.RawTetGenIO{Cdouble}()
 input.pointlist=[0 0 0;  
@@ -288,4 +304,6 @@ function test_error_output()
     true
 end
 @test test_error_output()
+
+end
 
