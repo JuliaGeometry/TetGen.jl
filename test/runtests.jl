@@ -262,13 +262,10 @@ function test_catch_error(geom)
     end
     false
 end
-    #@test test_catch_error(badcube1)
 if !Sys.iswindows()    
 @test test_catch_error(badcube2)
 end
     
-end
-
 ##############################################
 # Solely for increasing codecov
 
