@@ -125,13 +125,24 @@ function jl_wrap_tetunsuitable(pa::Ptr{Float64}, pb::Ptr{Float64}, pc::Ptr{Float
 end
 
 """
-   Set tetunsuitable function called from C wrapper.
-   Setting this function is valid only for one subsequent
-   call to tetrahedralize     
+$(SIGNATURES)
+
+Set tetunsuitable function called from C wrapper.
+Setting this function is valid only for one subsequent call to tetrahedralize.
+The function to be passed has the signature
+```
+unsuitable(p1::Vector{Float64},p2::Vector{Float64},p3::Vector{Float64},p4::Vector{Float64})::Bool
+```
+where `p1...p4` are 3-Vectors describing the corners of a tetrahedron, and the return value is `true` if
+its volume is seen as too large.
+   
 """
 function tetunsuitable!(unsuitable::Function; check_signature = true)
     if check_signature
-        unsuitable(rand(3), rand(3), rand(3), rand(3))
+        retval = unsuitable(rand(3), rand(3), rand(3), rand(3))
+        if !isa(retval, Bool)
+            error("unsuitable function should return a Bool")
+        end
     end
     global my_jl_tetunsuitable
     my_jl_tetunsuitable = unsuitable
