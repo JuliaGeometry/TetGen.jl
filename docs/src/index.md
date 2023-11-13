@@ -25,6 +25,10 @@ Modules = [TetGen]
 Pages = [ "rawtetgenio.jl"]
 ```
 
+```@docs
+tetunsuitable!
+```
+
 
 ## TetGen C++ code
 
