@@ -85,80 +85,80 @@ struct JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
     edgemarkers::Vector{Cint}
 
     function JLTetGenIO(points::Vector{Point{3, T}},
-            pointattributes::Vector{SVector{NAttributes, T}},
-            pointmtrs::Vector{SVector{NMTr, T}},
-            pointmarkers::Vector{Cint},
-            tetrahedrons::Vector{SimplexFace{NSimplex, Cint}},
-            tetrahedronattributes::Vector{T},
-            tetrahedronvolumes::Vector{T},
-            neighbors::Vector{Cint},
-            facets::FT,
-            facetmarkers::Vector{Cint},
-            holes::Vector{Point{3, T}},
-            regions::Vector{Region{T}},
-            facetconstraints::Vector{FacetConstraint{IT, T}},
-            segmentconstraints::Vector{SegmentationConstraint{IT, T}},
-            trifaces::Vector{TriangleFace{Cint}},
-            trifacemarkers::Vector{Cint},
-            edges::Vector{LineFace{Cint}},
-            edgemarkers::Vector{Cint}) where {T, NSimplex, NAttributes, NMTr, IT, FT}
+                        pointattributes::Vector{SVector{NAttributes, T}},
+                        pointmtrs::Vector{SVector{NMTr, T}},
+                        pointmarkers::Vector{Cint},
+                        tetrahedrons::Vector{SimplexFace{NSimplex, Cint}},
+                        tetrahedronattributes::Vector{T},
+                        tetrahedronvolumes::Vector{T},
+                        neighbors::Vector{Cint},
+                        facets::FT,
+                        facetmarkers::Vector{Cint},
+                        holes::Vector{Point{3, T}},
+                        regions::Vector{Region{T}},
+                        facetconstraints::Vector{FacetConstraint{IT, T}},
+                        segmentconstraints::Vector{SegmentationConstraint{IT, T}},
+                        trifaces::Vector{TriangleFace{Cint}},
+                        trifacemarkers::Vector{Cint},
+                        edges::Vector{LineFace{Cint}},
+                        edgemarkers::Vector{Cint}) where {T, NSimplex, NAttributes, NMTr, IT, FT}
         new{T, NSimplex, NAttributes, NMTr, IT, FT}(points,
-            pointattributes,
-            pointmtrs,
-            pointmarkers,
-            tetrahedrons,
-            tetrahedronattributes,
-            tetrahedronvolumes,
-            neighbors,
-            facets,
-            facetmarkers,
-            holes,
-            regions,
-            facetconstraints,
-            segmentconstraints,
-            trifaces,
-            trifacemarkers,
-            edges,
-            edgemarkers)
+                                                    pointattributes,
+                                                    pointmtrs,
+                                                    pointmarkers,
+                                                    tetrahedrons,
+                                                    tetrahedronattributes,
+                                                    tetrahedronvolumes,
+                                                    neighbors,
+                                                    facets,
+                                                    facetmarkers,
+                                                    holes,
+                                                    regions,
+                                                    facetconstraints,
+                                                    segmentconstraints,
+                                                    trifaces,
+                                                    trifacemarkers,
+                                                    edges,
+                                                    edgemarkers)
     end
 end
 
 function JLTetGenIO(points::Vector{Point{3, T}};
-        pointattributes = SVector{0, T}[],
-        pointmtrs = SVector{0, T}[],
-        pointmarkers = Cint[],
-        tetrahedrons = SimplexFace{4, Cint}[],
-        tetrahedronattributes = T[],
-        tetrahedronvolumes = T[],
-        neighbors = Cint[],
-        facets = JLFacet{T, Vector{Cint}}[],
-        facetmarkers = Cint[],
-        holes = Point{3, T}[],
-        regions = Region{T}[],
-        facetconstraints = FacetConstraint{inttype(T), T}[],
-        segmentconstraints = SegmentationConstraint{inttype(T), T}[],
-        trifaces = TriangleFace{Cint}[],
-        trifacemarkers = Cint[],
-        edges = LineFace{Cint}[],
-        edgemarkers = Cint[]) where {T}
+                    pointattributes = SVector{0, T}[],
+                    pointmtrs = SVector{0, T}[],
+                    pointmarkers = Cint[],
+                    tetrahedrons = SimplexFace{4, Cint}[],
+                    tetrahedronattributes = T[],
+                    tetrahedronvolumes = T[],
+                    neighbors = Cint[],
+                    facets = JLFacet{T, Vector{Cint}}[],
+                    facetmarkers = Cint[],
+                    holes = Point{3, T}[],
+                    regions = Region{T}[],
+                    facetconstraints = FacetConstraint{inttype(T), T}[],
+                    segmentconstraints = SegmentationConstraint{inttype(T), T}[],
+                    trifaces = TriangleFace{Cint}[],
+                    trifacemarkers = Cint[],
+                    edges = LineFace{Cint}[],
+                    edgemarkers = Cint[]) where {T}
     JLTetGenIO(points,
-        pointattributes,
-        pointmtrs,
-        pointmarkers,
-        tetrahedrons,
-        tetrahedronattributes,
-        tetrahedronvolumes,
-        neighbors,
-        facets,
-        facetmarkers,
-        holes,
-        regions,
-        facetconstraints,
-        segmentconstraints,
-        trifaces,
-        trifacemarkers,
-        edges,
-        edgemarkers)
+               pointattributes,
+               pointmtrs,
+               pointmarkers,
+               tetrahedrons,
+               tetrahedronattributes,
+               tetrahedronvolumes,
+               neighbors,
+               facets,
+               facetmarkers,
+               holes,
+               regions,
+               facetconstraints,
+               segmentconstraints,
+               trifaces,
+               trifacemarkers,
+               edges,
+               edgemarkers)
 end
 
 function number_of_elements_field(io, basename)
@@ -200,11 +200,11 @@ function get_array(io, field::Symbol, Typ)
 end
 
 function Base.convert(IOT::Type{JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, A}},
-        io::CPPTetGenIO{T}) where {T, NSimplex, NAttributes, NMTr, IT, A}
+                      io::CPPTetGenIO{T}) where {T, NSimplex, NAttributes, NMTr, IT, A}
     JLTetGenIO(ntuple(fieldcount(IOT)) do i
-        fname, ftype = fieldname(IOT, i), fieldtype(IOT, i)
-        get_array(io, fname, eltype(ftype))
-    end...)
+                   fname, ftype = fieldname(IOT, i), fieldtype(IOT, i)
+                   get_array(io, fname, eltype(ftype))
+               end...)
 end
 
 function Base.convert(::Type{JLTetGenIO}, io::CPPTetGenIO{T}) where {T}
@@ -239,12 +239,12 @@ function Base.cconvert(::Type{Ptr{CFacet{T}}}, facets::Vector{NgonFace{N, Cint}}
 end
 
 function unsafe_array_convert(::Type{Ptr{CFacet{T}}},
-        facets::Tuple{Vector{F}, Vector{Vector{CPolygon}}, Vector{CFacet{T}}}) where {F, T}
+                              facets::Tuple{Vector{F}, Vector{Vector{CPolygon}}, Vector{CFacet{T}}}) where {F, T}
     return Base.unsafe_convert(Ptr{CFacet{T}}, facets[3])
 end
 
 function unsafe_array_convert(::Type{Ptr{CFacet{T}}},
-        facets::Tuple{Vector{F}, Vector{CPolygon}, Vector{CFacet{T}}}) where {F, T}
+                              facets::Tuple{Vector{F}, Vector{CPolygon}, Vector{CFacet{T}}}) where {F, T}
     return Base.unsafe_convert(Ptr{CFacet{T}}, facets[3])
 end
 
@@ -265,15 +265,15 @@ end
         Base.unsafe_convert(P, x)
     end
 end
-    
+
 function Base.cconvert(CIO::Type{CPPTetGenIO{T}},
-        obj::JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, A}) where {T, NSimplex, NAttributes, NMTr, IT, A}
+                       obj::JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, A}) where {T, NSimplex, NAttributes, NMTr, IT, A}
     cfnames = fieldnames(CIO)
     dict = Dict{Symbol, Any}(:numberofpointattributes => NAttributes,
-        :numberofpointmtrs => NMTr,
-        :numberofcorners => NSimplex,
-        :firstnumber => Cint(1),
-        :mesh_dim => Cint(3))
+                             :numberofpointmtrs => NMTr,
+                             :numberofcorners => NSimplex,
+                             :firstnumber => Cint(1),
+                             :mesh_dim => Cint(3))
     gc_tack_cconvert = []
     for field in fieldnames(typeof(obj))
         basename = if field == :tetrahedra
@@ -312,7 +312,7 @@ end
 function tetrahedralize(input::JLTetGenIO{Float64}, command::String)
     rc = Cint[0]
     cres = ccall((:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}), input, command,
-        rc)
+                 rc)
     if rc[1] != 0
         throw(TetGenError(rc[1]))
     end
