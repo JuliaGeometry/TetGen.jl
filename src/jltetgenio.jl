@@ -240,12 +240,12 @@ end
 
 function unsafe_array_convert(::Type{Ptr{CFacet{T}}},
                               facets::Tuple{Vector{F}, Vector{Vector{CPolygon}}, Vector{CFacet{T}}}) where {F, T}
-    return Base.unsafe_convert(Ptr{CFacet{T}}, facets[3])
+    return Base.unsafe_convert(Ptr{CFacet{T}}, pointer(facets[3]))
 end
 
 function unsafe_array_convert(::Type{Ptr{CFacet{T}}},
                               facets::Tuple{Vector{F}, Vector{CPolygon}, Vector{CFacet{T}}}) where {F, T}
-    return Base.unsafe_convert(Ptr{CFacet{T}}, facets[3])
+    return Base.unsafe_convert(Ptr{CFacet{T}}, pointer(facets[3]))
 end
 
 function unsafe_array_convert(P::Type{Ptr{T}}, x::Vector{T}) where {T}
