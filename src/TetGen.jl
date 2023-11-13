@@ -19,7 +19,7 @@ include("meshes.jl")
 include("api.jl")
 
 export tetrahedralize
-export tetunsuitable
+export tetunsuitable!, tetunsuitable
 export TetGenError
 export RawTetGenIO, facetlist!, RawFacet
 export numberofpoints, numberoftetrahedra, numberoftrifaces, numberofedges

@@ -129,7 +129,7 @@ end
    Setting this function is valid only for one subsequent
    call to tetrahedralize     
 """
-function tetunsuitable(unsuitable::Function; check_signature = true)
+function tetunsuitable!(unsuitable::Function; check_signature = true)
     if check_signature
         unsuitable(rand(3), rand(3), rand(3), rand(3))
     end
@@ -138,3 +138,5 @@ function tetunsuitable(unsuitable::Function; check_signature = true)
     c_wrap_tetunsuitable = @cfunction(jl_wrap_tetunsuitable, Cint, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}))
     ccall((:tetunsuitable_callback, libtet), Cvoid, (Ptr{Cvoid},), c_wrap_tetunsuitable)
 end
+
+@deprecate tetunsuitable(unsuitable::Function; kwargs...) tetunsuitable!(unsuitable::Function; kwargs...)
