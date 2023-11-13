@@ -76,10 +76,10 @@ function Base.show(io::IO, e::TetGenError)
         println(io, "TetGen error $(e.rc): a self-intersection was detected. Hint: use -d option to detect all self-intersections.")
     elseif e.rc == 4
         println(io,
-            "TetGen error $(e.rc): a very small input feature size was detected. Hint: use -T option to set a smaller tolerance.")
+                "TetGen error $(e.rc): a very small input feature size was detected. Hint: use -T option to set a smaller tolerance.")
     elseif e.rc == 5
         println(io,
-            "TetGen error $(e.rc): two very close input facets were detected. Hint: use -Y option to avoid adding Steiner points in boundary.\n")
+                "TetGen error $(e.rc): two very close input facets were detected. Hint: use -Y option to avoid adding Steiner points in boundary.\n")
     elseif e.rc == 10
         println(io, "TetGen error $(e.rc): an input error was detected.\n")
     elseif e.rc == 101
@@ -97,11 +97,11 @@ Tetrahedralization with error handling
 function tetrahedralize(input::CPPTetGenIO{Float64}, command::String)
     rc = Cint[0]
     output = ccall((:tetrahedralize2_f64, libtet),
-        CPPTetGenIO{Float64},
-        (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}),
-        input,
-        command,
-        rc)
+                   CPPTetGenIO{Float64},
+                   (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}),
+                   input,
+                   command,
+                   rc)
     if rc[1] != 0
         throw(TetGenError(rc[1]))
     end
