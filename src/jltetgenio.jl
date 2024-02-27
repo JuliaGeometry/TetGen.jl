@@ -256,7 +256,7 @@ function unsafe_array_convert(P::Type{Ptr{T1}}, x::Vector{T2}) where {T1, T2}
     Ptr{T1}(Base.unsafe_convert(Ptr{T2}, x))
 end
 
-@static if VERSION > v"1.10"
+if isdefined(Base, :MemoryRef)
     function unsafe_array_convert(P::Type{Ptr{T1}}, x::MemoryRef{T2}) where {T1, T2}
         Ptr{T1}(Base.unsafe_convert(Ptr{T2}, x))
     end
