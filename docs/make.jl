@@ -9,9 +9,7 @@ function make_all()
              doctest = false,
              authors = "Simon Danisch, Juergen Fuhrmann",
              repo = "https://github.com/JuliaGeometry/TetGen.jl",
-             pages = [
-                 "Home" => "index.md",
-             ])
+             pages = ["Home" => "index.md"])
 
     if !isinteractive()
         deploydocs(; repo = "github.com/JuliaGeometry/TetGen.jl.git")
