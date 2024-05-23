@@ -58,11 +58,10 @@ using Test
 
     markers = Cint[-1, -2, 0, 0]
 
-    mesh = GeometryBasics.Mesh(V, meta(F, markers=markers))
+    mesh = GeometryBasics.Mesh(V, meta(F; markers = markers))
     result = tetrahedralize(mesh, "vpq1.414a0.1")
     @test result isa Mesh
 
-    
     ################# cube with hole example
     # Construct a cube out of Quads
     points = Point{3, Float64}[
