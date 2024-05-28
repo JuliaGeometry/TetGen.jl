@@ -111,7 +111,7 @@ mutable struct RawTetGenIO{T}
     """
      'regionlist': An array of regions (subdomains).  Each region is given by
      a seed (point) which lies strictly inside it. For each column,
-     the point coordinates ade  at indices [1], [2] and [3], followed by the regional
+     the point coordinates are  at indices [1], [2] and [3], followed by the regional
      attribute at index [4], followed by the maximum volume at index [5]. 
 
      ote that each regional attribute is used only if you select the 'A'
