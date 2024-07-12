@@ -48,6 +48,20 @@ using Test
     result = tetrahedralize(tetmesh, "pQqAa0.01")
     @test result isa Mesh
 
+    # tetmesh with facet markers (Issue #37)
+    F = TriangleFace{Cint}[TriangleFace(1, 2, 3), TriangleFace(4, 2, 1), TriangleFace(4, 3, 2), TriangleFace(4, 1, 3)]
+
+    V = Point{3, Float64}[[-0.8164965809277261, -0.47140452079103173, -0.3333333333333333],
+                          [0.8164965809277261, -0.47140452079103173, -0.3333333333333333],
+                          [0.0, 0.0, 1.0],
+                          [0.0, 0.9428090415820635, -0.3333333333333333]]
+
+    markers = Cint[-1, -2, 0, 0]
+
+    mesh = GeometryBasics.Mesh(V, meta(F; markers = markers))
+    result = tetrahedralize(mesh, "vpq1.414a0.1")
+    @test result isa Mesh
+
     ################# cube with hole example
     # Construct a cube out of Quads
     points = Point{3, Float64}[
