@@ -1,8 +1,7 @@
 using TetGen
 using TetGen: JLPolygon, JLFacet, Point
-using GeometryBasics
+using GeometryBasics: GeometryBasics
 using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace, faces
-using StructArrays
 using Test
 
 @testset "mesh based API" begin
@@ -21,12 +20,20 @@ using Test
 
     markers = Cint[-1, -2, 0, 0, 0, 0]
     # attach some additional information to our faces!
-    mesh = MetaMesh(points, facets; markers)
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, GeometryBasics.meta(facets; markers))
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets; markers)
+    end
     result = tetrahedralize(mesh)
     @test result isa Mesh
 
     # Make it similar to the README example
-    mesh = MetaMesh(points, facets)
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, facets)
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets)
+    end
     result = tetrahedralize(mesh, "vpq1.414a0.1")
     @test result isa Mesh
 
@@ -44,7 +51,11 @@ using Test
                                    [1, 3, 4],
                                    [2, 3, 4]]
 
-    tetmesh = MetaMesh(tetpoints, tetfacets)
+    if pkgversion(GeometryBasics) < v"0.5"
+        tetmesh = Mesh(tetpoints, tetfacets)
+    else
+        tetmesh = GeometryBasics.MetaMesh(tetpoints, tetfacets)
+    end
     result = tetrahedralize(tetmesh, "pQqAa0.01")
     @test result isa Mesh
 
@@ -81,8 +92,13 @@ using Test
                             [4, 8, 5, 1] .+ 8]
 
     markers = ones(Cint, 12)
-    mesh = MetaMesh(points, facets; markers = markers)
-    resultx = tetrahedralize(mesh, "pQqAa1.0"; holes = [Point{3, Float64}(0, 0, 0)])
+    
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, GeometryBasics.meta(facets; markers = markers))
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets; markers = markers)
+    end
+    result = tetrahedralize(mesh, "pQqAa1.0"; holes = [Point{3, Float64}(0, 0, 0)])
     @test result isa Mesh
 
     # s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
