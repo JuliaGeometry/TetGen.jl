@@ -4,7 +4,7 @@ using TetGen_jll
 
 import GeometryBasics
 using GeometryBasics: Polygon, MultiPolygon, Point, Point3f, LineFace, Polytope, Line,
-                      Simplex, connect, Triangle, NSimplex,
+                      Simplex, connect, Triangle, NSimplex, MetaMesh,
                       TupleView, TriangleFace, SimplexFace, LineString, Mesh, Tetrahedron, Triangle,
                       NgonFace, Ngon, faces, coordinates, faces
 
