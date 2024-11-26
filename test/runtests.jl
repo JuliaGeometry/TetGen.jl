@@ -1,9 +1,8 @@
 using TetGen
 using TetGen: JLPolygon, JLFacet, Point
 using GeometryBasics
-using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace,
-                      PointMeta, NgonFaceMeta, meta, faces, metafree
-using GeometryBasics.StructArrays
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace, faces
+using StructArrays
 using Test
 
 @testset "mesh based API" begin
