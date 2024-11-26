@@ -3,7 +3,8 @@
 *.jl.mem
 .repl_history.jl
 .DS_Store
-/Manifest.toml
+/Manifest*.toml
 docs/Manifest.toml
 docs/build
 QUARRY
+quarry

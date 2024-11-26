@@ -1,16 +1,19 @@
+"""
+    TetGen
+
+$(read(joinpath(@__DIR__,"..","README.md"),String))
+"""
 module TetGen
-using DocStringExtensions
-using TetGen_jll
-
+using DocStringExtensions: DocStringExtensions, SIGNATURES, TYPEDEF,
+                           TYPEDFIELDS, TYPEDSIGNATURES
 import GeometryBasics
-using GeometryBasics: Polygon, MultiPolygon, Point, Point3f, LineFace, Polytope, Line,
-                      Simplex, connect, Triangle, NSimplex, Tetrahedron,
-                      TupleView, TriangleFace, SimplexFace, LineString, Mesh, TetrahedronP, TriangleP,
-                      NgonFace, Ngon, faces, coordinates, metafree, meta, faces
+using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle, NSimplex,
+                      TriangleFace, SimplexFace, Mesh, Tetrahedron, Triangle,
+                      NgonFace, faces, coordinates
 
-using Printf
-
-using StaticArrays
+using Printf: Printf
+using StaticArrays: StaticArrays, SVector
+using TetGen_jll: TetGen_jll, libtet
 
 include("cpptetgenio.jl")
 include("jltetgenio.jl")
@@ -19,7 +22,7 @@ include("meshes.jl")
 include("api.jl")
 
 export tetrahedralize
-export tetunsuitable!, tetunsuitable
+export tetunsuitable!
 export TetGenError
 export RawTetGenIO, facetlist!, RawFacet
 export numberofpoints, numberoftetrahedra, numberoftrifaces, numberofedges

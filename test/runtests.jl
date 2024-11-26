@@ -1,9 +1,7 @@
-using TetGen
-using TetGen: JLPolygon, JLFacet, Point
-using GeometryBasics
-using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace,
-                      PointMeta, NgonFaceMeta, meta, faces, metafree
-using GeometryBasics.StructArrays
+using ExplicitImports, Aqua
+using TetGen: TetGen, JLPolygon, JLFacet, Point, tetrahedralize
+using GeometryBasics: GeometryBasics
+using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace, faces
 using Test
 
 @testset "mesh based API" begin
@@ -22,11 +20,20 @@ using Test
 
     markers = Cint[-1, -2, 0, 0, 0, 0]
     # attach some additional information to our faces!
-    mesh = Mesh(points, meta(facets; markers = markers))
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, GeometryBasics.meta(facets; markers))
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets; markers)
+    end
     result = tetrahedralize(mesh)
     @test result isa Mesh
 
     # Make it similar to the README example
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, facets)
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets)
+    end
     result = tetrahedralize(mesh, "vpq1.414a0.1")
     @test result isa Mesh
 
@@ -44,7 +51,11 @@ using Test
                                    [1, 3, 4],
                                    [2, 3, 4]]
 
-    tetmesh = Mesh(tetpoints, tetfacets)
+    if pkgversion(GeometryBasics) < v"0.5"
+        tetmesh = Mesh(tetpoints, tetfacets)
+    else
+        tetmesh = GeometryBasics.MetaMesh(tetpoints, tetfacets)
+    end
     result = tetrahedralize(tetmesh, "pQqAa0.01")
     @test result isa Mesh
 
@@ -81,8 +92,13 @@ using Test
                             [4, 8, 5, 1] .+ 8]
 
     markers = ones(Cint, 12)
-    mesh = Mesh(points, meta(facets; markers = markers))
-    resultx = tetrahedralize(mesh, "pQqAa1.0"; holes = [Point{3, Float64}(0, 0, 0)])
+
+    if pkgversion(GeometryBasics) < v"0.5"
+        mesh = Mesh(points, GeometryBasics.meta(facets; markers = markers))
+    else
+        mesh = GeometryBasics.MetaMesh(points, facets; markers = markers)
+    end
+    result = tetrahedralize(mesh, "pQqAa1.0"; holes = [Point{3, Float64}(0, 0, 0)])
     @test result isa Mesh
 
     # s = Sphere{Float64}(Point(0.0, 0.0, 0.0), 2.0)
@@ -261,4 +277,19 @@ end
         true
     end
     @test test_error_output()
+end
+
+@testset "ExplicitImports" begin
+    @test ExplicitImports.check_no_implicit_imports(TetGen) === nothing
+    @test ExplicitImports.check_no_stale_explicit_imports(TetGen) === nothing
+end
+
+@testset "Aqua" begin
+    Aqua.test_all(TetGen)
+end
+
+if isdefined(Docs, :undocumented_names)
+    @testset "UndocumentedNames" begin
+        @test isempty(Docs.undocumented_names(TetGen))
+    end
 end

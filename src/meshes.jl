@@ -23,10 +23,10 @@ function GeometryBasics.Mesh{P}(x::JLTetGenIO{T}) where {P <: Polytope{N, T} whe
     Mesh{Polytope(P, Point{3, T})}(x)
 end
 
-function GeometryBasics.Mesh{TetrahedronP{ET, P}}(x::JLTetGenIO) where {ET, P}
-    Mesh(convert(Vector{P}, x.points), x.tetrahedra)
+function GeometryBasics.Mesh{Tetrahedron{ET}}(x::JLTetGenIO) where {ET}
+    Mesh(x.points, x.tetrahedra)
 end
 
-function GeometryBasics.Mesh{TriangleP{3, ET, P}}(x::JLTetGenIO) where {ET, P}
-    Mesh(convert(Vector{P}, x.points), x.trifaces)
+function GeometryBasics.Mesh{Triangle{3, ET}}(x::JLTetGenIO) where {ET}
+    Mesh(x.points, x.trifaces)
 end

@@ -4,7 +4,6 @@ function make_all()
     makedocs(;
              sitename = "TetGen.jl",
              modules = [TetGen],
-             warnonly = true,
              clean = false,
              doctest = false,
              authors = "Simon Danisch, Juergen Fuhrmann",
