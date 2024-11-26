@@ -287,3 +287,9 @@ end
 @testset "Aqua" begin
     Aqua.test_all(TetGen)
 end
+
+if isdefined(Docs, :undocumented_names)
+    @testset "UndocumentedNames" begin
+        @test isempty(Docs.undocumented_names(TetGen))
+    end
+end

@@ -9,6 +9,7 @@ All notable changes to this project since V1.0 will be documented in this file.
   The RawTetGenIO based API is not affected. Users who
   rely on the RawTetGenIO based API can use  `TetGen="1,2"` 
   in their `[compat]` section.
+- Breaking: remove deprecated `tetunsuitable`. Use `tetunsuitable!` instead
 
 ## [1.5.1] - 2024-02-27
 
