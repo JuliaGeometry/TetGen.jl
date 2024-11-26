@@ -16,10 +16,8 @@ $(SIGNATURES)
 Tetrahedralize a mesh of polygons with optional facet markers.
 Returns a mesh of tetrahdra.
 """
-function TetGen.tetrahedralize(
-        mesh, command = "Qp";
-        marker = :markers, holes = Point{3, Float64}[]
-    )
+function TetGen.tetrahedralize(mesh, command = "Qp";
+                               marker = :markers, holes = Point{3, Float64}[])
     f = faces(mesh)
     if pkgversion(GeometryBasics) < v"0.5"
         kw_args = Any[:facets => GeometryBasics.metafree(f), :holes => holes]
