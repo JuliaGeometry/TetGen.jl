@@ -64,7 +64,7 @@ Plotted with Makie:
 ```julia
 using TetGen
 let
-    tetunsuitable() do pa,pb,pc,pd
+    tetunsuitable!() do pa,pb,pc,pd
         vol=det(hcat(pb-pa,pc-pa,pd-pa))/6
         center=0.25*(pa+pb+pc+pd)-[0.5,0.5,0.5]
         vol> 0.05*norm(center)^2.5

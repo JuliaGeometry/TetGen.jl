@@ -14,6 +14,8 @@ Modules = [TetGen]
 Pages = ["api.jl"]
 ```
 
+
+
 ## Raw API
 This API is closer to TetGen's C++ API in the sense that
 input and output are described using arrays of integers
@@ -40,3 +42,8 @@ tetunsuitable!
   Link to preprint  [here](http://doi.org/10.20347/WIAS.PREPRINT.1762). 
 
 
+## Internal API
+```@autodocs
+Modules = [TetGen]
+Pages = ["meshes.jl", "jltetgenio.jl", "cpptetgenio.jl"]
+```

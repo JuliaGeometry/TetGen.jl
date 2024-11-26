@@ -1,3 +1,8 @@
+"""
+    TetGen
+
+$(read(joinpath(@__DIR__,"..","README.md"),String))
+"""
 module TetGen
 using DocStringExtensions: DocStringExtensions, SIGNATURES, TYPEDEF,
                            TYPEDFIELDS, TYPEDSIGNATURES
@@ -17,7 +22,7 @@ include("meshes.jl")
 include("api.jl")
 
 export tetrahedralize
-export tetunsuitable!, tetunsuitable
+export tetunsuitable!
 export TetGenError
 export RawTetGenIO, facetlist!, RawFacet
 export numberofpoints, numberoftetrahedra, numberoftrifaces, numberofedges
