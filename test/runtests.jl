@@ -1,5 +1,5 @@
-using TetGen
-using TetGen: JLPolygon, JLFacet, Point
+using ExplicitImports, Aqua
+using TetGen: TetGen, JLPolygon, JLFacet, Point, tetrahedralize
 using GeometryBasics: GeometryBasics
 using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace, faces
 using Test
@@ -277,4 +277,13 @@ end
         true
     end
     @test test_error_output()
+end
+
+@testset "ExplicitImports" begin
+    @test ExplicitImports.check_no_implicit_imports(TetGen) === nothing
+    @test ExplicitImports.check_no_stale_explicit_imports(TetGen) === nothing
+end
+
+@testset "Aqua" begin
+    Aqua.test_all(TetGen)
 end
