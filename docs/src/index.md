@@ -5,6 +5,12 @@ tetrahedralizations,  constrained  Delaunay  tetrahedralizations,  and
 quality tetrahedral  meshes. TetGen.jl  provides a Julia  interface to
 TetGen.
 
+
+```@docs
+TetGen
+```
+
+
 ## Mesh based API
 This API uses instances of types from [GeometryBasics.jl](https://github.com/JuliaGeometry/GeometryBasics.jl) 
 to describe input and output of TetGen.
