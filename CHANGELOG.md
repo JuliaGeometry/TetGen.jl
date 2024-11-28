@@ -2,7 +2,7 @@
 
 All notable changes to this project since V1.0 will be documented in this file.
 
-## [2.0]
+## [2.0] - 2024-11-28
 - Allow for GeometryBasics v0.5 along with 0.4
 - Breaking: with GeometryBasics v0.5, a MetaMesh has 
   to be provided as input for Tetrahedralize. 
