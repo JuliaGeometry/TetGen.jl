@@ -29,13 +29,13 @@ function TetGen.tetrahedralize(mesh::Mesh{3, Float64, <:TetGen.Ngon}, command = 
 end
 
 """
-$(SIGNATURES)
+ $(SIGNATURES)
 
-Tetrahedralize a domain described by a mesh of triangles.
-Returns a mesh of tetrahdra.
+ Tetrahedralize a domain described by a mesh of triangles.
+ Returns a mesh of tetrahdra.
 """
-function TetGen.tetrahedralize(mesh::Mesh{3, Float64, <:TetGen.Triangle}, command = "Qp")
-    tio = JLTetGenIO(coordinates(mesh); facets = faces(mesh))
-    result = tetrahedralize(tio, command)
-    Mesh{Tetrahedron}(result)
-end
+ function TetGen.tetrahedralize(mesh::Mesh{3, Float64, <:TetGen.Triangle}, command = "Qp")
+     tio = JLTetGenIO(coordinates(mesh); facets = faces(mesh))
+     result = tetrahedralize(tio, command)
+     Mesh{Tetrahedron}(result)
+ end
