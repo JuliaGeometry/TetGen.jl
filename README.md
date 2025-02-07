@@ -18,7 +18,7 @@ When installing TetGen.jl, a compiled library version of the TetGen library will
 
 See the [TetGen Licensing FAQ](http://wias-berlin.de/software/tetgen/1.5/FAQ-license.html) for other options.
 
-## Example using GeometryBasics datatypes
+## Example using GeometryBasics v0.5 datatypes
 
 ```julia
 using TetGen
@@ -44,14 +44,14 @@ facets = QuadFace{Cint}[
 
 markers = Cint[-1, -2, 0, 0, 0, 0]
 # attach some additional information to our faces!
-mesh = Mesh(points, meta(facets, markers=markers))
-result = tetrahedralize(mesh, "vpq1.414a0.1")
+mymesh = GeometryBasics.MetaMesh(points, facets; markers)
+result = tetrahedralize(mymesh, "vpq1.414a0.1")
 
 using GLMakie
 
-GLMakie.mesh(normal_mesh(result), color=(:blue, 0.1), transparency=true)
-GLMakie.wireframe!(result)
+GLMakie.mesh(result, color=(:blue, 0.05), transparency=true, shading=NoShading)
 
+GLMakie.wireframe!(result, color=:black)
 ```
 
 Plotted with Makie:
