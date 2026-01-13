@@ -17,7 +17,7 @@ end
 """
    cube(;vol=1)
 
-Tetrahedralization of cube witn maximum tetrahedron volume.
+Tetrahedralization of cube with maximum tetrahedron volume.
 """
 function cube(; vol = 1)
     input = TetGen.RawTetGenIO{Cdouble}()
@@ -48,7 +48,7 @@ end
 """
    cubewithhole(;vol=1)
 
-Tetrahedralization of cube witn maximum tetrahedron volume.
+Tetrahedralization of cube with maximum tetrahedron volume.
 """
 function cubewithhole(; vol = 1)
     input = TetGen.RawTetGenIO{Cdouble}()

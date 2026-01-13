@@ -235,7 +235,7 @@ end
 
 """
     $(TYPEDSIGNATURES)
-    Set list of input facets from AbstractMatrix desribing polygons of the same
+    Set list of input facets from AbstractMatrix describing polygons of the same
     size (e.g. triangles)
 """
 function facetlist!(tio::RawTetGenIO{T}, facets::AbstractMatrix) where {T}
