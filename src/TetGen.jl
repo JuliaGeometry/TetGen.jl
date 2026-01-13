@@ -7,7 +7,7 @@ module TetGen
 using DocStringExtensions: DocStringExtensions, SIGNATURES, TYPEDEF,
                            TYPEDFIELDS, TYPEDSIGNATURES
 import GeometryBasics
-using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle, NSimplex,
+using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle,
                       TriangleFace, SimplexFace, Mesh, Tetrahedron, Triangle,
                       NgonFace, faces, coordinates
 
