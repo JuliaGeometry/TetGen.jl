@@ -23,8 +23,10 @@ Default command is "Qp", creating the Delaunay
 triangulation of the point set. See the list of
 possible flags in the documentation of [`tetrahedralize(::RawTetGenIO, flags)`](@ref).
 """
-function TetGen.tetrahedralize(mesh, command = "Qp";
-                               marker = :markers, holes = Point{3, Float64}[])
+function tetrahedralize(
+        mesh, command = "Qp";
+        marker = :markers, holes = Point{3, Float64}[]
+    )
     f = faces(mesh)
     if pkgversion(GeometryBasics) < v"0.5"
         kw_args = Any[:facets => GeometryBasics.metafree(f), :holes => holes]

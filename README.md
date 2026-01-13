@@ -6,7 +6,7 @@
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/dev)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
-The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://wias-berlin.de/software/index.jsp?id=TetGen&lang=1). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tesselation.
+The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://wias-berlin.de/software/index.jsp?id=TetGen&lang=1). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tessellation.
 
 If you find TetGen useful, please consider citing
 Hang Si: "TetGen, a Delaunay-Based Quality Tetrahedral Mesh Generator" ACM Trans. on Mathematical Software. 41 (2), 2015

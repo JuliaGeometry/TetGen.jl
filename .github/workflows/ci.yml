@@ -21,8 +21,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          - macOS-13 # intel
-          - macOS-14 # arm
+          - macOS-latest
         arch:
           - x64
           - aarch64
@@ -31,11 +30,7 @@ jobs:
             arch: aarch64
           - os: windows-latest
             arch: aarch64
-          - os: macOS-13 
-            arch: aarch64
-          - os: macOS-14
-            version: 1.6
-          - os: macOS-14
+          - os: macOS-latest
             arch: x64
     steps:
       - uses: actions/checkout@v4
@@ -81,4 +76,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-          

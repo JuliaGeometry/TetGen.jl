@@ -1,15 +1,15 @@
 """
     TetGen
 
-$(read(joinpath(@__DIR__,"..","README.md"),String))
+$(read(joinpath(@__DIR__, "..", "README.md"), String))
 """
 module TetGen
 using DocStringExtensions: DocStringExtensions, SIGNATURES, TYPEDEF,
-                           TYPEDFIELDS, TYPEDSIGNATURES
+    TYPEDFIELDS, TYPEDSIGNATURES
 import GeometryBasics
-using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle, NSimplex,
-                      TriangleFace, SimplexFace, Mesh, Tetrahedron, Triangle,
-                      NgonFace, faces, coordinates
+using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle,
+    TriangleFace, SimplexFace, Mesh, Tetrahedron, Triangle,
+    NgonFace, faces, coordinates
 
 using Printf: Printf
 using StaticArrays: StaticArrays, SVector
