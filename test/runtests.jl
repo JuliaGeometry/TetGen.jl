@@ -6,17 +6,21 @@ using Test
 
 @testset "mesh based API" begin
     # Construct a cube out of Quads
-    points = Point{3, Float64}[(0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
-                               (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
-                               (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
-                               (2.0, 2.0, 12.0), (0.0, 2.0, 12.0)]
+    points = Point{3, Float64}[
+        (0.0, 0.0, 0.0), (2.0, 0.0, 0.0),
+        (2.0, 2.0, 0.0), (0.0, 2.0, 0.0),
+        (0.0, 0.0, 12.0), (2.0, 0.0, 12.0),
+        (2.0, 2.0, 12.0), (0.0, 2.0, 12.0),
+    ]
 
-    facets = QuadFace{Cint}[1:4,
-                            5:8,
-                            [1, 5, 6, 2],
-                            [2, 6, 7, 3],
-                            [3, 7, 8, 4],
-                            [4, 8, 5, 1]]
+    facets = QuadFace{Cint}[
+        1:4,
+        5:8,
+        [1, 5, 6, 2],
+        [2, 6, 7, 3],
+        [3, 7, 8, 4],
+        [4, 8, 5, 1],
+    ]
 
     markers = Cint[-1, -2, 0, 0, 0, 0]
     # attach some additional information to our faces!
@@ -41,15 +45,19 @@ using Test
     result = TetGen.voronoi(points)
     @test result isa Mesh
 
-    tetpoints = Point{3, Float64}[(0.0, 0.0, 0.0),
-                                  (1.0, 0.0, 0.0),
-                                  (0.0, 1.0, 0.0),
-                                  (0.0, 0.0, 1.0)]
+    tetpoints = Point{3, Float64}[
+        (0.0, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        (0.0, 1.0, 0.0),
+        (0.0, 0.0, 1.0),
+    ]
 
-    tetfacets = TriangleFace{Cint}[[1, 2, 3],
-                                   [1, 2, 4],
-                                   [1, 3, 4],
-                                   [2, 3, 4]]
+    tetfacets = TriangleFace{Cint}[
+        [1, 2, 3],
+        [1, 2, 4],
+        [1, 3, 4],
+        [2, 3, 4],
+    ]
 
     if pkgversion(GeometryBasics) < v"0.5"
         tetmesh = Mesh(tetpoints, tetfacets)
@@ -62,34 +70,36 @@ using Test
     ################# cube with hole example
     # Construct a cube out of Quads
     points = Point{3, Float64}[
-                               # outer cube:
-                               (-2.0, -2.0, -2.0), (2.0, -2.0, -2.0),
-                               (2.0, 2.0, -2.0), (-2.0, 2.0, -2.0),
-                               (-2.0, -2.0, 2.0), (2.0, -2.0, 2.0),
-                               (2.0, 2.0, 2.0), (-2.0, 2.0, 2.0),
+        # outer cube:
+        (-2.0, -2.0, -2.0), (2.0, -2.0, -2.0),
+        (2.0, 2.0, -2.0), (-2.0, 2.0, -2.0),
+        (-2.0, -2.0, 2.0), (2.0, -2.0, 2.0),
+        (2.0, 2.0, 2.0), (-2.0, 2.0, 2.0),
 
-                               # inner cube: 
-                               (-1.0, -1.0, -1.0), (1.0, -1.0, -1.0),
-                               (1.0, 1.0, -1.0), (-1.0, 1.0, -1.0),
-                               (-1.0, -1.0, 1.0), (1.0, -1.0, 1.0),
-                               (1.0, 1.0, 1.0), (-1.0, 1.0, 1.0)]
+        # inner cube:
+        (-1.0, -1.0, -1.0), (1.0, -1.0, -1.0),
+        (1.0, 1.0, -1.0), (-1.0, 1.0, -1.0),
+        (-1.0, -1.0, 1.0), (1.0, -1.0, 1.0),
+        (1.0, 1.0, 1.0), (-1.0, 1.0, 1.0),
+    ]
 
     facets = QuadFace{Cint}[
-                            # outer cube:
-                            [1, 2, 3, 4],
-                            [5, 6, 7, 8],
-                            [1, 5, 6, 2],
-                            [2, 6, 7, 3],
-                            [3, 7, 8, 4],
-                            [4, 8, 5, 1],
+        # outer cube:
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [1, 5, 6, 2],
+        [2, 6, 7, 3],
+        [3, 7, 8, 4],
+        [4, 8, 5, 1],
 
-                            # inner cube:
-                            [1, 2, 3, 4] .+ 8,
-                            [5, 6, 7, 8] .+ 8,
-                            [1, 5, 6, 2] .+ 8,
-                            [2, 6, 7, 3] .+ 8,
-                            [3, 7, 8, 4] .+ 8,
-                            [4, 8, 5, 1] .+ 8]
+        # inner cube:
+        [1, 2, 3, 4] .+ 8,
+        [5, 6, 7, 8] .+ 8,
+        [1, 5, 6, 2] .+ 8,
+        [2, 6, 7, 3] .+ 8,
+        [3, 7, 8, 4] .+ 8,
+        [4, 8, 5, 1] .+ 8,
+    ]
 
     markers = ones(Cint, 12)
 
@@ -188,42 +198,54 @@ end
 @testset "error handling" begin
     function badcube1(; vol = 1)
         input = TetGen.RawTetGenIO{Cdouble}()
-        input.pointlist = [0 0 0;
-                           1 0 0;
-                           1 1 0;
-                           0 1 0;
-                           0 0 1;
-                           1 0 2;
-                           1 1 1;
-                           0 1 2]'
+        input.pointlist = [
+            0 0 0;
+            1 0 0;
+            1 1 0;
+            0 1 0;
+            0 0 1;
+            1 0 2;
+            1 1 1;
+            0 1 2
+        ]'
 
-        TetGen.facetlist!(input, [1 2 3 4;
-                                  5 6 7 8;
-                                  1 2 6 5;
-                                  2 3 7 6;
-                                  3 4 8 7;
-                                  4 1 5 8]')
+        TetGen.facetlist!(
+            input, [
+                1 2 3 4;
+                5 6 7 8;
+                1 2 6 5;
+                2 3 7 6;
+                3 4 8 7;
+                4 1 5 8
+            ]'
+        )
         tetrahedralize(input, "pQa$(vol)")
     end
 
     function badcube2(; vol = 1)
         input = TetGen.RawTetGenIO{Cdouble}()
-        input.pointlist = [0 0 0;
-                           1 0 0;
-                           1 1 0;
-                           0 1 0;
-                           0 0 1;
-                           1 0 1;
-                           1 1 1;
-                           0 1 1;
-                           0 1 1-1.0e-5]'
+        input.pointlist = [
+            0 0 0;
+            1 0 0;
+            1 1 0;
+            0 1 0;
+            0 0 1;
+            1 0 1;
+            1 1 1;
+            0 1 1;
+            0 1 1 - 1.0e-5
+        ]'
 
-        TetGen.facetlist!(input, [1 2 3 4;
-                                  5 6 7 8;
-                                  1 2 6 5;
-                                  2 3 7 6;
-                                  3 4 8 7;
-                                  4 1 5 8]')
+        TetGen.facetlist!(
+            input, [
+                1 2 3 4;
+                5 6 7 8;
+                1 2 6 5;
+                2 3 7 6;
+                3 4 8 7;
+                4 1 5 8
+            ]'
+        )
         tetrahedralize(input, "pQa$(vol)")
     end
 
@@ -249,21 +271,27 @@ end
 
 @testset "codecov" begin
     input = TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       1 1 0;
-                       0 1 0;
-                       0 0 1;
-                       1 0 1;
-                       1 1 1;
-                       0 1 1]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        1 1 0;
+        0 1 0;
+        0 0 1;
+        1 0 1;
+        1 1 1;
+        0 1 1
+    ]'
 
-    TetGen.facetlist!(input, [1 2 3 4;
-                              5 6 7 8;
-                              1 2 6 5;
-                              2 3 7 6;
-                              3 4 8 7;
-                              4 1 5 8]')
+    TetGen.facetlist!(
+        input, [
+            1 2 3 4;
+            5 6 7 8;
+            1 2 6 5;
+            2 3 7 6;
+            3 4 8 7;
+            4 1 5 8
+        ]'
+    )
 
     cinput, x1, x2 = TetGen.CPPTetGenIO(input)
     coutput = tetrahedralize(cinput, "pQa")
@@ -271,7 +299,7 @@ end
     @test coutput.numberofpoints == 8
 
     function test_error_output()
-        for i = 1:10
+        for i in 1:10
             println(TetGenError(i))
         end
         true

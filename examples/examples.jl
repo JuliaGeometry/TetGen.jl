@@ -11,7 +11,7 @@ it is unique.
 """
 function random_delaunay(; npoints = 20)
     input = TetGen.RawTetGenIO{Cdouble}(; pointlist = rand(3, npoints))
-    tetrahedralize(input, "Q")
+    return tetrahedralize(input, "Q")
 end
 
 """
@@ -21,22 +21,28 @@ Tetrahedralization of cube witn maximum tetrahedron volume.
 """
 function cube(; vol = 1)
     input = TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       1 1 0;
-                       0 1 0;
-                       0 0 1;
-                       1 0 1;
-                       1 1 1;
-                       0 1 1]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        1 1 0;
+        0 1 0;
+        0 0 1;
+        1 0 1;
+        1 1 1;
+        0 1 1
+    ]'
 
-    TetGen.facetlist!(input, [1 2 3 4;
-                              5 6 7 8;
-                              1 2 6 5;
-                              2 3 7 6;
-                              3 4 8 7;
-                              4 1 5 8]')
-    tetrahedralize(input, "pQa$(vol)")
+    TetGen.facetlist!(
+        input, [
+            1 2 3 4;
+            5 6 7 8;
+            1 2 6 5;
+            2 3 7 6;
+            3 4 8 7;
+            4 1 5 8
+        ]'
+    )
+    return tetrahedralize(input, "pQa$(vol)")
 end
 
 """
@@ -46,28 +52,32 @@ Tetrahedralization of cube witn maximum tetrahedron volume.
 """
 function cubewithhole(; vol = 1)
     input = TetGen.RawTetGenIO{Cdouble}()
-    outerpoints = [-1 -1 -1;
-                   1 -1 -1;
-                   1 1 -1;
-                   -1 1 -1;
-                   -1 -1 1;
-                   1 -1 1;
-                   1 1 1;
-                   -1 1 1]'
+    outerpoints = [
+        -1 -1 -1;
+        1 -1 -1;
+        1 1 -1;
+        -1 1 -1;
+        -1 -1 1;
+        1 -1 1;
+        1 1 1;
+        -1 1 1
+    ]'
 
     input.pointlist = hcat(outerpoints, outerpoints / 2)
 
-    outerfacets = [1 2 3 4;
-                   5 6 7 8;
-                   1 2 6 5;
-                   2 3 7 6;
-                   3 4 8 7;
-                   4 1 5 8]'
+    outerfacets = [
+        1 2 3 4;
+        5 6 7 8;
+        1 2 6 5;
+        2 3 7 6;
+        3 4 8 7;
+        4 1 5 8
+    ]'
 
     input.holelist = [0 0 0;]'
 
     TetGen.facetlist!(input, hcat(outerfacets, outerfacets .+ 8))
-    tetrahedralize(input, "pQa$(vol)")
+    return tetrahedralize(input, "pQa$(vol)")
 end
 
 """
@@ -83,22 +93,28 @@ function cube_localref()
     end
 
     input = TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       1 1 0;
-                       0 1 0;
-                       0 0 1;
-                       1 0 1;
-                       1 1 1;
-                       0 1 1]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        1 1 0;
+        0 1 0;
+        0 0 1;
+        1 0 1;
+        1 1 1;
+        0 1 1
+    ]'
 
-    TetGen.facetlist!(input, [1 2 3 4;
-                              5 6 7 8;
-                              1 2 6 5;
-                              2 3 7 6;
-                              3 4 8 7;
-                              4 1 5 8]')
-    tetrahedralize(input, "pQa")
+    TetGen.facetlist!(
+        input, [
+            1 2 3 4;
+            5 6 7 8;
+            1 2 6 5;
+            2 3 7 6;
+            3 4 8 7;
+            4 1 5 8
+        ]'
+    )
+    return tetrahedralize(input, "pQa")
 end
 
 """
@@ -109,7 +125,7 @@ end
 function cube_stl()
     modeldir = joinpath(dirname(pathof(TetGen)), "..", "test", "surfaceModels")
     modelfile = joinpath(modeldir, "cube.stl")
-    tetrahedralize(modelfile, "pQa1.0")
+    return tetrahedralize(modelfile, "pQa1.0")
 end
 """
    prism(;vol=1)
@@ -118,20 +134,26 @@ Tetrahedralization of a prism with maximum tetrahedron volume.
 """
 function prism(vol = 2)
     input = TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       0 1 0;
-                       0 0 1;
-                       1 0 1;
-                       0 1 1]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        0 1 0;
+        0 0 1;
+        1 0 1;
+        0 1 1
+    ]'
 
-    TetGen.facetlist!(input, [[1, 2, 3],
-                          [4, 5, 6],
-                          [1, 2, 5, 4],
-                          [2, 3, 6, 5],
-                          [3, 1, 4, 6]])
+    TetGen.facetlist!(
+        input, [
+            [1, 2, 3],
+            [4, 5, 6],
+            [1, 2, 5, 4],
+            [2, 3, 6, 5],
+            [3, 1, 4, 6],
+        ]
+    )
 
-    tetrahedralize(input, "pQa$(vol)")
+    return tetrahedralize(input, "pQa$(vol)")
 end
 
 """
@@ -142,31 +164,39 @@ Tetrahedralization of a prism with two regions with different tet volumes
 function material_prism(; vol1 = 0.01, vol2 = 0.1)
     input = TetGen.RawTetGenIO{Cdouble}()
 
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       0 1 0;
-                       0 0 1;
-                       1 0 1;
-                       0 1 1;
-                       0 0 2;
-                       1 0 2;
-                       0 1 2]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        0 1 0;
+        0 0 1;
+        1 0 1;
+        0 1 1;
+        0 0 2;
+        1 0 2;
+        0 1 2
+    ]'
 
-    TetGen.facetlist!(input,
-                      [[1, 2, 3],
-                          [7, 8, 9],
-                          [1, 2, 5, 4],
-                          [2, 3, 6, 5],
-                          [3, 1, 4, 6],
-                          [1, 2, 5, 4] .+ 3,
-                          [2, 3, 6, 5] .+ 3,
-                          [3, 1, 4, 6] .+ 3])
+    TetGen.facetlist!(
+        input,
+        [
+            [1, 2, 3],
+            [7, 8, 9],
+            [1, 2, 5, 4],
+            [2, 3, 6, 5],
+            [3, 1, 4, 6],
+            [1, 2, 5, 4] .+ 3,
+            [2, 3, 6, 5] .+ 3,
+            [3, 1, 4, 6] .+ 3,
+        ]
+    )
 
     input.facetmarkerlist = [1, 2, 3, 3, 3, 3, 3, 3]
-    input.regionlist = [0.1 0.1 0.5 1 vol1;
-                        0.1 0.1 1.5 2 vol2]'
+    input.regionlist = [
+        0.1 0.1 0.5 1 vol1;
+        0.1 0.1 1.5 2 vol2
+    ]'
 
-    tetrahedralize(input, "paAqQ")
+    return tetrahedralize(input, "paAqQ")
 end
 
 """
@@ -177,20 +207,22 @@ This tests the use of facet holes.
 """
 function cutprism(; vol = 0.05)
     input = TetGen.RawTetGenIO{Cdouble}()
-    input.pointlist = [0 0 0;
-                       1 0 0;
-                       0 1 0;
-                       0 0 10;
-                       1 0 10;
-                       0 1 10;
-                       -1 -1 0;  # 7
-                       2 -1 0;
-                       2 2 0;
-                       -1 2 0;
-                       -1 -1 10;  # 11
-                       2 -1 10;
-                       2 2 10;
-                       -1 2 10]'
+    input.pointlist = [
+        0 0 0;
+        1 0 0;
+        0 1 0;
+        0 0 10;
+        1 0 10;
+        0 1 10;
+        -1 -1 0;  # 7
+        2 -1 0;
+        2 2 0;
+        -1 2 0;
+        -1 -1 10;  # 11
+        2 -1 10;
+        2 2 10;
+        -1 2 10
+    ]'
 
     push!(input.facetlist, RawFacet([Cint[1, 2, 3], Cint[7, 8, 9, 10]], [0.1 0.1 0.0;]))
     push!(input.facetlist, RawFacet([Cint[4, 5, 6], Cint[11, 12, 13, 14]], [0.1 0.1 1.0;]))
@@ -204,5 +236,5 @@ function cutprism(; vol = 0.05)
 
     input.facetmarkerlist = [1, 2, 3, 3, 3, 4, 5, 6, 7]
     input.regionlist = [-0.1 -0.1 0.1 1 vol;]'
-    tetrahedralize(input, "paqAQ")
+    return tetrahedralize(input, "paqAQ")
 end

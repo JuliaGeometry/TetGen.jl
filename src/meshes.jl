@@ -20,13 +20,13 @@ Can also be called with extra information, e.g.:
 ```
 """
 function GeometryBasics.Mesh{P}(x::JLTetGenIO{T}) where {P <: Polytope{N, T} where {N, T}, T}
-    Mesh{Polytope(P, Point{3, T})}(x)
+    return Mesh{Polytope(P, Point{3, T})}(x)
 end
 
 function GeometryBasics.Mesh{Tetrahedron{ET}}(x::JLTetGenIO) where {ET}
-    Mesh(x.points, x.tetrahedra)
+    return Mesh(x.points, x.tetrahedra)
 end
 
 function GeometryBasics.Mesh{Triangle{3, ET}}(x::JLTetGenIO) where {ET}
-    Mesh(x.points, x.trifaces)
+    return Mesh(x.points, x.trifaces)
 end

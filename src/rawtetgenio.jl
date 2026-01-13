@@ -165,42 +165,45 @@ $(TYPEDSIGNATURES)
 Create RawTetGenIO structure with empty data.
 """
 function RawTetGenIO{T}(;
-                        pointlist = Array{T, 2}(undef, 0, 0),
-                        pointattributelist = Array{T, 2}(undef, 0, 0),
-                        pointmtrlist = Array{T, 2}(undef, 0, 0),
-                        pointmarkerlist = Array{Cint, 1}(undef, 0),
-                        tetrahedronlist = Array{Cint, 2}(undef, 0, 0),
-                        tetrahedronattributelist = Array{T, 2}(undef, 0, 0),
-                        tetrahedronvolumelist = Array{T, 1}(undef, 0),
-                        neighborlist = Array{Cint, 2}(undef, 0, 0),
-                        facetlist = Array{RawFacet{T}, 1}(undef, 0),
-                        facetmarkerlist = Array{Cint, 1}(undef, 0),
-                        holelist = Array{T, 2}(undef, 0, 0),
-                        regionlist = Array{T, 2}(undef, 0, 0),
-                        facetconstraintlist = Array{T, 2}(undef, 0, 0),
-                        segmentconstraintlist = Array{T, 2}(undef, 0, 0),
-                        trifacelist = Array{Cint, 2}(undef, 0, 0),
-                        trifacemarkerlist = Array{Cint, 1}(undef, 0),
-                        edgelist = Array{Cint, 2}(undef, 0, 0),
-                        edgemarkerlist = Array{Cint}(undef, 0)) where {T}
-    RawTetGenIO{T}(pointlist,
-                   pointattributelist,
-                   pointmtrlist,
-                   pointmarkerlist,
-                   tetrahedronlist,
-                   tetrahedronattributelist,
-                   tetrahedronvolumelist,
-                   neighborlist,
-                   facetlist,
-                   facetmarkerlist,
-                   holelist,
-                   regionlist,
-                   facetconstraintlist,
-                   segmentconstraintlist,
-                   trifacelist,
-                   trifacemarkerlist,
-                   edgelist,
-                   edgemarkerlist)
+        pointlist = Array{T, 2}(undef, 0, 0),
+        pointattributelist = Array{T, 2}(undef, 0, 0),
+        pointmtrlist = Array{T, 2}(undef, 0, 0),
+        pointmarkerlist = Array{Cint, 1}(undef, 0),
+        tetrahedronlist = Array{Cint, 2}(undef, 0, 0),
+        tetrahedronattributelist = Array{T, 2}(undef, 0, 0),
+        tetrahedronvolumelist = Array{T, 1}(undef, 0),
+        neighborlist = Array{Cint, 2}(undef, 0, 0),
+        facetlist = Array{RawFacet{T}, 1}(undef, 0),
+        facetmarkerlist = Array{Cint, 1}(undef, 0),
+        holelist = Array{T, 2}(undef, 0, 0),
+        regionlist = Array{T, 2}(undef, 0, 0),
+        facetconstraintlist = Array{T, 2}(undef, 0, 0),
+        segmentconstraintlist = Array{T, 2}(undef, 0, 0),
+        trifacelist = Array{Cint, 2}(undef, 0, 0),
+        trifacemarkerlist = Array{Cint, 1}(undef, 0),
+        edgelist = Array{Cint, 2}(undef, 0, 0),
+        edgemarkerlist = Array{Cint}(undef, 0)
+    ) where {T}
+    return RawTetGenIO{T}(
+        pointlist,
+        pointattributelist,
+        pointmtrlist,
+        pointmarkerlist,
+        tetrahedronlist,
+        tetrahedronattributelist,
+        tetrahedronvolumelist,
+        neighborlist,
+        facetlist,
+        facetmarkerlist,
+        holelist,
+        regionlist,
+        facetconstraintlist,
+        segmentconstraintlist,
+        trifacelist,
+        trifacemarkerlist,
+        edgelist,
+        edgemarkerlist
+    )
 end
 
 function Base.show(io::IO, tio::RawTetGenIO)
@@ -227,7 +230,7 @@ function Base.show(io::IO, tio::RawTetGenIO)
             println(io, ",")
         end
     end
-    println(io, ")")
+    return println(io, ")")
 end
 
 """
@@ -238,10 +241,10 @@ end
 function facetlist!(tio::RawTetGenIO{T}, facets::AbstractMatrix) where {T}
     numberoffacets = size(facets, 2)
     tio.facetlist = Array{RawFacet{T}, 1}(undef, numberoffacets)
-    for ifacet = 1:numberoffacets
+    for ifacet in 1:numberoffacets
         tio.facetlist[ifacet] = RawFacet{T}([Vector{Cint}(facets[:, ifacet])], Array{T, 2}(undef, 0, 0))
     end
-    tio
+    return tio
 end
 
 """
@@ -251,10 +254,10 @@ end
 function facetlist!(tio::RawTetGenIO{T}, facets::Vector) where {T}
     numberoffacets = size(facets, 1)
     tio.facetlist = Array{RawFacet{T}, 1}(undef, numberoffacets)
-    for ifacet = 1:numberoffacets
+    for ifacet in 1:numberoffacets
         tio.facetlist[ifacet] = RawFacet{T}([Vector{Cint}(facets[ifacet])], Array{T, 2}(undef, 0, 0))
     end
-    tio
+    return tio
 end
 
 #
@@ -347,17 +350,19 @@ function CPPTetGenIO(tio::RawTetGenIO{T}) where {T}
 
     numberoffacets = size(tio.facetlist, 1)
     if numberoffacets > 0
-        for ifacet = 1:numberoffacets
+        for ifacet in 1:numberoffacets
             facet = tio.facetlist[ifacet]
             numberofpolygons = size(facet.polygonlist, 1)
             polygonlist = Array{CPolygon, 1}(undef, numberofpolygons)
-            for ipolygon = 1:numberofpolygons
+            for ipolygon in 1:numberofpolygons
                 polygonlist[ipolygon] = CPolygon(pointer(facet.polygonlist[ipolygon]), size(facet.polygonlist[ipolygon], 1))
             end
             numberofholes = size(facet.holelist, 2)
             push!(polygonlist_array, polygonlist)
-            push!(facetlist_array,
-                  CFacet(pointer(polygonlist), Cint(numberofpolygons), pointer(facet.holelist), Cint(numberofholes)))
+            push!(
+                facetlist_array,
+                CFacet(pointer(polygonlist), Cint(numberofpolygons), pointer(facet.holelist), Cint(numberofholes))
+            )
         end
         facetlist = pointer(facetlist_array)
     end
@@ -412,39 +417,41 @@ function CPPTetGenIO(tio::RawTetGenIO{T}) where {T}
     end
 
     # Create struct
-    CPPTetGenIO{T}(firstnumber,
-                   mesh_dim,
-                   pointlist,
-                   pointattributelist,
-                   pointmtrlist,
-                   pointmarkerlist,
-                   numberofpoints,
-                   numberofpointattributes,
-                   numberofpointmtrs,
-                   tetrahedronlist,
-                   tetrahedronattributelist,
-                   tetrahedronvolumelist,
-                   neighborlist,
-                   numberoftetrahedra,
-                   numberofcorners,
-                   numberoftetrahedronattributes,
-                   facetlist,
-                   facetmarkerlist,
-                   numberoffacets,
-                   holelist,
-                   numberofholes,
-                   regionlist,
-                   numberofregions,
-                   facetconstraintlist,
-                   numberoffacetconstraints,
-                   segmentconstraintlist,
-                   numberofsegmentconstraints,
-                   trifacelist,
-                   trifacemarkerlist,
-                   numberoftrifaces,
-                   edgelist,
-                   edgemarkerlist,
-                   numberofedges), facetlist_array, polygonlist_array
+    return CPPTetGenIO{T}(
+            firstnumber,
+            mesh_dim,
+            pointlist,
+            pointattributelist,
+            pointmtrlist,
+            pointmarkerlist,
+            numberofpoints,
+            numberofpointattributes,
+            numberofpointmtrs,
+            tetrahedronlist,
+            tetrahedronattributelist,
+            tetrahedronvolumelist,
+            neighborlist,
+            numberoftetrahedra,
+            numberofcorners,
+            numberoftetrahedronattributes,
+            facetlist,
+            facetmarkerlist,
+            numberoffacets,
+            holelist,
+            numberofholes,
+            regionlist,
+            numberofregions,
+            facetconstraintlist,
+            numberoffacetconstraints,
+            segmentconstraintlist,
+            numberofsegmentconstraints,
+            trifacelist,
+            trifacemarkerlist,
+            numberoftrifaces,
+            edgelist,
+            edgemarkerlist,
+            numberofedges
+        ), facetlist_array, polygonlist_array
 end
 
 #
@@ -456,39 +463,63 @@ function RawTetGenIO(ctio::CPPTetGenIO{T}) where {T}
         tio.pointlist = convert(Array{T, 2}, Base.unsafe_wrap(Array, ctio.pointlist, (3, Int(ctio.numberofpoints)); own = true))
     end
     if ctio.numberofpointattributes > 0 && ctio.pointattributelist != C_NULL
-        tio.pointattributelist = convert(Array{T, 2},
-                                         Base.unsafe_wrap(Array, ctio.pointattributelist,
-                                                          (Int(ctio.numberofpointattributes), Int(ctio.numberofpoints));
-                                                          own = true))
+        tio.pointattributelist = convert(
+            Array{T, 2},
+            Base.unsafe_wrap(
+                Array, ctio.pointattributelist,
+                (Int(ctio.numberofpointattributes), Int(ctio.numberofpoints));
+                own = true
+            )
+        )
     end
     if ctio.numberofpointmtrs > 0 && ctio.pointmtrlist != C_NULL
-        tio.pointmtrlist = convert(Array{T, 2},
-                                   Base.unsafe_wrap(Array, ctio.pointmtrlist,
-                                                    (Int(ctio.numberofpointmtrs), Int(ctio.numberofpoints)); own = true))
+        tio.pointmtrlist = convert(
+            Array{T, 2},
+            Base.unsafe_wrap(
+                Array, ctio.pointmtrlist,
+                (Int(ctio.numberofpointmtrs), Int(ctio.numberofpoints)); own = true
+            )
+        )
     end
     if ctio.pointmarkerlist != C_NULL
-        tio.pointmarkerlist = convert(Array{Cint, 1},
-                                      Base.unsafe_wrap(Array, ctio.pointmarkerlist, (Int(ctio.numberofpoints)); own = true))
+        tio.pointmarkerlist = convert(
+            Array{Cint, 1},
+            Base.unsafe_wrap(Array, ctio.pointmarkerlist, (Int(ctio.numberofpoints)); own = true)
+        )
     end
     @assert ctio.numberofcorners == 4
     if ctio.numberoftetrahedra > 0 && ctio.tetrahedronlist != C_NULL
-        tio.tetrahedronlist = convert(Array{Cint, 2},
-                                      Base.unsafe_wrap(Array, ctio.tetrahedronlist, (4, Int(ctio.numberoftetrahedra)); own = true))
+        tio.tetrahedronlist = convert(
+            Array{Cint, 2},
+            Base.unsafe_wrap(Array, ctio.tetrahedronlist, (4, Int(ctio.numberoftetrahedra)); own = true)
+        )
     end
     if ctio.numberoftetrahedronattributes > 0 && ctio.tetrahedronattributelist != C_NULL
-        tio.tetrahedronattributelist = convert(Array{T, 2},
-                                               Base.unsafe_wrap(Array, ctio.tetrahedronattributelist,
-                                                                (Int(ctio.numberoftetrahedronattributes),
-                                                                 Int(ctio.numberoftetrahedra)); own = true))
+        tio.tetrahedronattributelist = convert(
+            Array{T, 2},
+            Base.unsafe_wrap(
+                Array, ctio.tetrahedronattributelist,
+                (
+                    Int(ctio.numberoftetrahedronattributes),
+                    Int(ctio.numberoftetrahedra),
+                ); own = true
+            )
+        )
     end
     if ctio.tetrahedronvolumelist != C_NULL
-        tio.tetrahedronvolumelist = convert(Array{T, 1},
-                                            Base.unsafe_wrap(Array, ctio.tetrahedronvolumelist, (Int(ctio.numberoftetrahedra));
-                                                             own = true))
+        tio.tetrahedronvolumelist = convert(
+            Array{T, 1},
+            Base.unsafe_wrap(
+                Array, ctio.tetrahedronvolumelist, (Int(ctio.numberoftetrahedra));
+                own = true
+            )
+        )
     end
     if ctio.numberoftetrahedra > 0 && ctio.neighborlist != C_NULL
-        tio.neighborlist = convert(Array{Cint, 2},
-                                   Base.unsafe_wrap(Array, ctio.neighborlist, (4, Int(ctio.numberoftetrahedra)); own = true))
+        tio.neighborlist = convert(
+            Array{Cint, 2},
+            Base.unsafe_wrap(Array, ctio.neighborlist, (4, Int(ctio.numberoftetrahedra)); own = true)
+        )
     end
 
     # Essentially, facetlist appears to be used only during input, so we can skip the
@@ -528,29 +559,43 @@ function RawTetGenIO(ctio::CPPTetGenIO{T}) where {T}
 
     # own ? May be comes from input
     if ctio.numberoffacetconstraints > 0
-        tio.facetconstraintlist = convert(Array{T, 1},
-                                          Base.unsafe_wrap(Array, ctio.facetconstraintlist, (2, ctio.numberoffacetconstraints);
-                                                           own = false))
+        tio.facetconstraintlist = convert(
+            Array{T, 1},
+            Base.unsafe_wrap(
+                Array, ctio.facetconstraintlist, (2, ctio.numberoffacetconstraints);
+                own = false
+            )
+        )
     end
 
     # own ? May be comes from input
     if ctio.numberofsegmentconstraints > 0
-        tio.segmentconstraintlist = convert(Array{T, 1},
-                                            Base.unsafe_wrap(Array, ctio.segmentconstraintlist,
-                                                             (3, ctio.numberofsegmentconstraints); own = false))
+        tio.segmentconstraintlist = convert(
+            Array{T, 1},
+            Base.unsafe_wrap(
+                Array, ctio.segmentconstraintlist,
+                (3, ctio.numberofsegmentconstraints); own = false
+            )
+        )
     end
 
     if ctio.numberoftrifaces > 0 && ctio.trifacelist != C_NULL && ctio.trifacemarkerlist != C_NULL
-        tio.trifacelist = convert(Array{Cint, 2},
-                                  Base.unsafe_wrap(Array, ctio.trifacelist, (3, Int(ctio.numberoftrifaces)); own = true))
-        tio.trifacemarkerlist = convert(Array{Cint, 1},
-                                        Base.unsafe_wrap(Array, ctio.trifacemarkerlist, (Int(ctio.numberoftrifaces)); own = true))
+        tio.trifacelist = convert(
+            Array{Cint, 2},
+            Base.unsafe_wrap(Array, ctio.trifacelist, (3, Int(ctio.numberoftrifaces)); own = true)
+        )
+        tio.trifacemarkerlist = convert(
+            Array{Cint, 1},
+            Base.unsafe_wrap(Array, ctio.trifacemarkerlist, (Int(ctio.numberoftrifaces)); own = true)
+        )
     end
 
     if ctio.numberofedges > 0 && ctio.edgelist != C_NULL && ctio.edgemarkerlist != C_NULL
         tio.edgelist = convert(Array{Cint, 2}, Base.unsafe_wrap(Array, ctio.edgelist, (2, Int(ctio.numberofedges)); own = true))
-        tio.edgemarkerlist = convert(Array{Cint, 1},
-                                     Base.unsafe_wrap(Array, ctio.edgemarkerlist, (Int(ctio.numberofedges)); own = true))
+        tio.edgemarkerlist = convert(
+            Array{Cint, 1},
+            Base.unsafe_wrap(Array, ctio.edgemarkerlist, (Int(ctio.numberofedges)); own = true)
+        )
     end
 
     return tio
@@ -630,12 +675,14 @@ Tetrahedralize input.
 function tetrahedralize(input::RawTetGenIO{Float64}, flags::String)
     cinput, flist, plist = CPPTetGenIO(input)
     rc = Cint[0]
-    coutput = ccall((:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}),
-                    cinput, flags, rc)
+    coutput = ccall(
+        (:tetrahedralize2_f64, libtet), CPPTetGenIO{Float64}, (CPPTetGenIO{Float64}, Cstring, Ptr{Cint}),
+        cinput, flags, rc
+    )
     if rc[1] != 0
         throw(TetGenError(rc[1]))
     end
-    RawTetGenIO(coutput)
+    return RawTetGenIO(coutput)
 end
 
 """
@@ -650,7 +697,7 @@ function tetrahedralize(stlfile::String, flags::String)
     if rc[1] != 0
         throw(TetGenError(rc[1]))
     end
-    RawTetGenIO(coutput)
+    return RawTetGenIO(coutput)
 end
 
 """
@@ -660,9 +707,9 @@ Create GeometryBasics.Mesh from the triface list
 (for quick visualization purposes using Makie's wireframe).
 """
 function surfacemesh(tgio::RawTetGenIO)
-    points = [Point3f(tgio.pointlist[:, i]...) for i = 1:size(tgio.pointlist, 2)]
-    faces = [TriangleFace(tgio.trifacelist[:, i]...) for i = 1:size(tgio.trifacelist, 2)]
-    mesh = GeometryBasics.Mesh(points, faces)
+    points = [Point3f(tgio.pointlist[:, i]...) for i in 1:size(tgio.pointlist, 2)]
+    faces = [TriangleFace(tgio.trifacelist[:, i]...) for i in 1:size(tgio.trifacelist, 2)]
+    return mesh = GeometryBasics.Mesh(points, faces)
 end
 
 """
@@ -672,15 +719,15 @@ Create GeometryBasics.Mesh of all tetrahedron faces
 (for quick visualization purposes using Makie's wireframe).
 """
 function volumemesh(tgio::RawTetGenIO)
-    points = [Point3f(tgio.pointlist[:, i]...) for i = 1:size(tgio.pointlist, 2)]
+    points = [Point3f(tgio.pointlist[:, i]...) for i in 1:size(tgio.pointlist, 2)]
     faces = Array{NgonFace{3, Int32}, 1}(undef, 0)
     tetlist = tgio.tetrahedronlist
-    for itet = 1:size(tetlist, 2)
+    for itet in 1:size(tetlist, 2)
         tet = view(tetlist, :, itet)
         push!(faces, TriangleFace(tet[1], tet[2], tet[3]))
         push!(faces, TriangleFace(tet[1], tet[2], tet[4]))
         push!(faces, TriangleFace(tet[2], tet[3], tet[4]))
         push!(faces, TriangleFace(tet[3], tet[1], tet[4]))
     end
-    mesh = GeometryBasics.Mesh(points, faces)
+    return mesh = GeometryBasics.Mesh(points, faces)
 end
