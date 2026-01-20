@@ -166,6 +166,16 @@ end
     @test numberoftrifaces(result) == 12
     generic_test(result)
 
+    @info "interior_mesh_stl"
+    result = interior_mesh_stl()
+    @test numberofpoints(result) == 13494
+    @test numberoftetrahedra(result) == 53114
+    @test numberofedges(result) == 15449
+    @test numberoftrifaces(result) == 19050
+    generic_test(result)
+    @info "interior_mesh_stl done"
+
+    
     result = cubewithhole()
     @test numberofpoints(result) == 56
     @test numberoftetrahedra(result) == 168
