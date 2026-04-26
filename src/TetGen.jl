@@ -4,6 +4,7 @@
 $(read(joinpath(@__DIR__, "..", "README.md"), String))
 """
 module TetGen
+using Dates: now
 using DocStringExtensions: DocStringExtensions, SIGNATURES, TYPEDEF,
     TYPEDFIELDS, TYPEDSIGNATURES
 import GeometryBasics
@@ -11,7 +12,7 @@ using GeometryBasics: Point, Point3f, LineFace, Polytope, Triangle,
     TriangleFace, SimplexFace, Mesh, Tetrahedron, Triangle,
     NgonFace, faces, coordinates
 
-using Printf: Printf
+using Printf: Printf, @sprintf
 using StaticArrays: StaticArrays, SVector
 using TetGen_jll: TetGen_jll, libtet
 
