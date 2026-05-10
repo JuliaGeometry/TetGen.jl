@@ -731,3 +731,83 @@ function volumemesh(tgio::RawTetGenIO)
     end
     return mesh = GeometryBasics.Mesh(points, faces)
 end
+
+
+"""
+$(TYPEDSIGNATURES)
+
+Write TetGenIO input data to output stream.
+"""
+function writesmesh(io::IO, tio::RawTetGenIO)
+    shift = 1
+    npoints = size(tio.pointlist, 2)
+    dimension = 3
+    npointboundarymarkers = 0
+    npointattributes = 0
+    nfacets = length(tio.facetlist)
+    nfacetboundarymarkers = length(tio.facetmarkerlist) > 0 ? 1 : 0
+    nholes = size(tio.holelist, 2)
+    nregions = size(tio.regionlist, 2)
+
+    write(io, @sprintf("# TetGen input file\n"))
+    write(io, @sprintf("# Creator: TetGen.jl\n"))
+    write(io, @sprintf("# Creation date: %s\n", string(now())))
+    write(io, @sprintf("\n# part 1: node list."))
+    write(io, @sprintf("\n%ld %d %d %d", npoints, dimension, npointboundarymarkers, npointattributes))
+    for ipoint in 1:npoints
+        write(
+            io, @sprintf(
+                "\n%ld %.17g %.17g %.17g", ipoint - 1,
+                tio.pointlist[1, ipoint], tio.pointlist[2, ipoint], tio.pointlist[3, ipoint]
+            )
+        )
+    end
+    write(io, @sprintf("\n\n# part 2: facet list."))
+    write(io, @sprintf("\n%ld %d", nfacets, nfacetboundarymarkers))
+    for ifacet in 1:nfacets
+        facet = tio.facetlist[ifacet].polygonlist[1]
+        ncorners = length(facet)
+        write(io, @sprintf("\n%ld ", ncorners))
+        for icorner in 1:ncorners
+            write(io, @sprintf("%ld ", facet[icorner] - 1))
+        end
+        if nfacetboundarymarkers > 0
+            write(io, @sprintf("%ld ", tio.facetmarkerlist[ifacet]))
+        end
+    end
+    write(io, @sprintf("\n\n# part 3: hole list."))
+    write(io, @sprintf("\n%ld", nholes))
+    for ihole in 1:nholes
+        write(
+            io, @sprintf(
+                "\n%ld %.17g %.17g %.17g", ihole - 1,
+                tio.holelist[1, ihole], tio.holelist[2, ihole], tio.holelist[3, ihole]
+            )
+        )
+    end
+    write(io, @sprintf("\n\n# part 4: region list."))
+    write(io, @sprintf("\n%ld", nregions))
+    for iregion in 1:nregions
+        write(
+            io, @sprintf(
+                "\n%ld %.17g %.17g %.17g %f %.17g", iregion - 1,
+                tio.regionlist[1, iregion], tio.regionlist[2, iregion], tio.regionlist[3, iregion],
+                tio.regionlist[4, iregion], tio.regionlist[5, iregion]
+            )
+        )
+    end
+    write(io, "\n")
+    return
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Write TetGenIO input data to TetGen .smesh file.
+"""
+function writesmesh(fname::String, tio::RawTetGenIO)
+    open(fname, "w") do io
+        writesmesh(io, tio)
+    end
+    return
+end

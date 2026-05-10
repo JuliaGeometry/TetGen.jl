@@ -1,9 +1,10 @@
 name = "TetGen"
 uuid = "c5d3f3f7-f850-59f6-8a2e-ffc6dc1317ea"
 authors = ["SimonDanisch <sdanisch@gmail.com>", "Juergen Fuhrmann <juergen.fuhrmann@wias-berlin.de"]
-version = "2.0.1"
+version = "2.1.0"
 
 [deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -12,6 +13,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 TetGen_jll = "b47fdcd6-d2c1-58e9-bbba-c1cee8d8c179"
 
 [compat]
+Dates = "1.9"
 DocStringExtensions = "0.8,0.9"
 GeometryBasics = "0.4, 0.5"
 LinearAlgebra = "1"
