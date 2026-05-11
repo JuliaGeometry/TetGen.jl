@@ -2,7 +2,14 @@
 
 All notable changes to this project since V1.0 will be documented in this file.
 
-## [2.0] - 2024-11-28
+## [2.0.2] - 2026-05-11
+- Cap TetGen_jll.jl version to ~1.5.3, to avoid unexpected behavior in CI tests.
+  See #47 for a discussion of the background
+
+## [2.0.1] - 2026-01-13
+- modernize tests and CI
+
+## [2.0.1] - 2024-11-28
 - Allow for GeometryBasics v0.5 along with 0.4
 - Breaking: with GeometryBasics v0.5, a MetaMesh has 
   to be provided as input for Tetrahedralize. 
