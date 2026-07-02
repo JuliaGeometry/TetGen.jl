@@ -127,6 +127,15 @@ function cube_stl()
     modelfile = joinpath(modeldir, "cube.stl")
     return tetrahedralize(modelfile, "pQa1.0")
 end
+
+function interior_mesh_stl()
+    modeldir = joinpath(dirname(pathof(TetGen)), "..", "test", "surfaceModels")
+    modelfile = joinpath(modeldir, "interior_mesh.stl")
+    tetrahedralize(modelfile, "pQq1.4")
+end
+
+
+
 """
    prism(;vol=1)
 
