@@ -13,7 +13,7 @@ struct RawFacet{T}
     polygonlist::Array{Array{Cint, 1}, 1}
 
     """
-    Array of points given by their coordinates
+    `3 x npoints`  array of points given by their coordinates
     marking polygons describing holes in the facet.
     """
     holelist::Array{T, 2}
@@ -357,6 +357,9 @@ function CPPTetGenIO(tio::RawTetGenIO{T}) where {T}
             for ipolygon in 1:numberofpolygons
                 polygonlist[ipolygon] = CPolygon(pointer(facet.polygonlist[ipolygon]), size(facet.polygonlist[ipolygon], 1))
             end
+            if length(facet.holelist) > 0
+                @assert size(facet.holelist, 1) == 3
+            end
             numberofholes = size(facet.holelist, 2)
             push!(polygonlist_array, polygonlist)
             push!(
@@ -698,6 +701,16 @@ function tetrahedralize(stlfile::String, flags::String)
         throw(TetGenError(rc[1]))
     end
     return RawTetGenIO(coutput)
+end
+
+function save_poly(input::RawTetGenIO{Float64}, fstub::String)
+    cinput, flist, plist = CPPTetGenIO(input)
+    return ccall((:save_poly, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
+end
+
+function save_nodes(input::RawTetGenIO{Float64}, fstub::String)
+    cinput, flist, plist = CPPTetGenIO(input)
+    return ccall((:save_nodes, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
 end
 
 """
