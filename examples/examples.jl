@@ -224,8 +224,8 @@ function cutprism(; vol = 0.05)
         -1 2 10
     ]'
 
-    push!(input.facetlist, RawFacet([Cint[1, 2, 3], Cint[7, 8, 9, 10]], [0.1 0.1 0.0;]))
-    push!(input.facetlist, RawFacet([Cint[4, 5, 6], Cint[11, 12, 13, 14]], [0.1 0.1 1.0;]))
+    push!(input.facetlist, RawFacet([Cint[1, 2, 3], Cint[7, 8, 9, 10]], Matrix([0.1 0.1 0.0;]')))
+    push!(input.facetlist, RawFacet([Cint[4, 5, 6], Cint[11, 12, 13, 14]], Matrix([0.1 0.1 1.0;]')))
     push!(input.facetlist, RawFacet([Cint[1, 2, 5, 4]], Array{Cdouble, 2}(undef, 0, 0)))
     push!(input.facetlist, RawFacet([Cint[2, 3, 6, 5]], Array{Cdouble, 2}(undef, 0, 0)))
     push!(input.facetlist, RawFacet([Cint[3, 1, 4, 6]], Array{Cdouble, 2}(undef, 0, 0)))
@@ -236,5 +236,5 @@ function cutprism(; vol = 0.05)
 
     input.facetmarkerlist = [1, 2, 3, 3, 3, 4, 5, 6, 7]
     input.regionlist = [-0.1 -0.1 0.1 1 vol;]'
-    return tetrahedralize(input, "paqAQ")
+    return tetrahedralize(input, "p") #aqAQ")
 end
