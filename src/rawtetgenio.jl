@@ -704,17 +704,23 @@ function tetrahedralize(stlfile::String, flags::String)
 end
 
 function save_poly(input::RawTetGenIO{Float64}, fstub::String)
+    if pkgversion(TetGen_jll) < v"1.6.1"
+        error("save_poly is only available with TetGen_jll >=v1.6.1")
+    end
     cinput, flist, plist = CPPTetGenIO(input)
     return ccall((:save_poly, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
 end
 
 function save_nodes(input::RawTetGenIO{Float64}, fstub::String)
+    if pkgversion(TetGen_jll) < v"1.6.1"
+        error("save_nodes is only available with TetGen_jll >=v1.6.1")
+    end
     cinput, flist, plist = CPPTetGenIO(input)
     return ccall((:save_nodes, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
 end
 
 """
-$(TYPEDSIGNATURES)
+$(TYPEDSIGNATURES) 
 
 Create GeometryBasics.Mesh from the triface list
 (for quick visualization purposes using Makie's wireframe).
