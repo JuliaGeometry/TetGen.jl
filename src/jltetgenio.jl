@@ -339,3 +339,9 @@ function tetrahedralize(input::JLTetGenIO{Float64}, command::String)
     end
     return convert(JLTetGenIO, cres)
 end
+
+function save_tetgen(input::JLTetGenIO{Float64}, fstub::String)
+    cinput = Base.cconvert(CPPTetGenIO{Float64}, input)
+    save_tetgen(cinput[1], fstub)
+    return nothing
+end

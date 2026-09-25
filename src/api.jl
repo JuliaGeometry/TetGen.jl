@@ -10,6 +10,20 @@ function voronoi(points::Vector{Point{3, T}}) where {T <: AbstractFloat}
     return Mesh{Triangle}(result)
 end
 
+
+function JLTetGenIO(mesh; marker = :markers, holes = Point{3, Float64}[])
+    f = faces(mesh)
+    if pkgversion(GeometryBasics) < v"0.5"
+        kw_args = Any[:facets => GeometryBasics.metafree(f), :holes => holes]
+    else
+        kw_args = Any[:facets => f, :holes => holes]
+    end
+    if hasproperty(f, marker)
+        push!(kw_args, :facetmarkers => getproperty(f, marker))
+    end
+    return JLTetGenIO(coordinates(mesh); kw_args...)
+end
+
 """
 $(SIGNATURES)
 
@@ -27,18 +41,14 @@ function tetrahedralize(
         mesh, command = "Qp";
         marker = :markers, holes = Point{3, Float64}[]
     )
-    f = faces(mesh)
-    if pkgversion(GeometryBasics) < v"0.5"
-        kw_args = Any[:facets => GeometryBasics.metafree(f), :holes => holes]
-    else
-        kw_args = Any[:facets => f, :holes => holes]
-    end
-    if hasproperty(f, marker)
-        push!(kw_args, :facetmarkers => getproperty(f, marker))
-    end
-    tio = JLTetGenIO(coordinates(mesh); kw_args...)
+    tio = JLTetGenIO(mesh; marker, holes)
     result = tetrahedralize(tio, command)
     return Mesh{Tetrahedron}(result)
+end
+
+function save_tetgen(mesh, fstub; marker = :markers, holes = Point{3, Float64}[])
+    return save_tetgen(JLTetGenIO(mesh; marker, holes), fstub)
+    return true
 end
 
 # JF: probably this case is included in the case above
