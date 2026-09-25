@@ -1,6 +1,6 @@
 name = "TetGen"
 uuid = "c5d3f3f7-f850-59f6-8a2e-ffc6dc1317ea"
-version = "2.0.2"
+version = "3.0"
 authors = ["SimonDanisch <sdanisch@gmail.com>", "Juergen Fuhrmann <juergen.fuhrmann@wias-berlin.de"]
 
 [deps]
@@ -17,5 +17,5 @@ GeometryBasics = "0.4, 0.5"
 LinearAlgebra = "1"
 Printf = "1"
 StaticArrays = "1"
-TetGen_jll = "~1.5.3, 1.6.1"
+TetGen_jll = "~1.5.4, 1.6.1"
 julia = "1.9"

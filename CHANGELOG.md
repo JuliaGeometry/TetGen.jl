@@ -1,11 +1,11 @@
 # Changelog
 
 All notable changes to this project since V1.0 will be documented in this file.
+
 ## [3.0.0] - 2026-09-28
 - Update TetGen_jll.jl dependency to 1.6.1 (corresponding to upstream TetGen version 1.6.1). Keep supporting TetGen_jll.jl 
-  version 1.5.3 (corresponding to upstream TetGen version 1.5.1)
-- Modify test infrastructure which runs tests for both jll versions
-- Add `save_poly` and `save_nodes` methods for `RawTetgenIO`
+  version 1.5.4 (corresponding to upstream TetGen version 1.5.1)
+- Add `save_tetgen` method to write out tetgen input to allow easy bug reporting to upstream
 
 ## [2.0.2] - 2026-05-11
 - Cap TetGen_jll.jl version to ~1.5.3, to avoid unexpected behavior in CI tests.
