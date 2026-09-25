@@ -10,6 +10,11 @@ struct CFacet{T}
     numberofholes::Cint
 end
 
+"""
+   struct CPPTetGenIO
+
+Julia "mirror" structure to be passed to the C wrapper code.
+"""
 struct CPPTetGenIO{T}
     firstnumber::Cint # 0 or 1, default 0.
     mesh_dim::Cint # must be 3.
@@ -158,7 +163,7 @@ end
 
 
 """
-   save(input, fstub)
+   save_tetgen(input, fstub)
 
 Save input (mesh, [`CPPTetGenIO`](@ref), [`JLTetGenIO`](@ref) or  [`RawTetGenIO`](@ref))
 to the files `fstub.node` and `fstub.poly`. These can be read by the tetgen executable and are suited for submission of

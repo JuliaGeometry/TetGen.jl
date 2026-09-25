@@ -55,6 +55,11 @@ end
 inttype(::Type{Float64}) = Int64
 inttype(::Type{Float32}) = Int32
 
+"""
+   struct JLTetGenIO
+
+Intermediate structure for TetGen data for interaction with GeometryBasics.Mesh.
+"""
 struct JLTetGenIO{T, NSimplex, NAttributes, NMTr, IT, FT}
     points::Vector{Point{3, T}}
     pointattributes::Vector{SVector{NAttributes, T}}
