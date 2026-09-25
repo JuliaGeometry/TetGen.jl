@@ -1,8 +1,18 @@
 using ExplicitImports, Aqua
-using TetGen: TetGen, JLPolygon, JLFacet, Point, tetrahedralize
+using TetGen: TetGen, JLPolygon, JLFacet, Point, tetrahedralize, save_tetgen
 using GeometryBasics: GeometryBasics
 using GeometryBasics: Mesh, Triangle, Tetrahedron, TriangleFace, QuadFace, faces
 using Test
+
+function testsave(input, fstub)
+    return mktempdir() do dir
+        cd(dir) do
+            save_tetgen(input, fstub)
+            sleep(1)
+            isfile(fstub * ".node") && isfile(fstub * ".poly")
+        end
+    end
+end
 
 @testset "mesh based API" begin
     # Construct a cube out of Quads
@@ -29,6 +39,7 @@ using Test
     else
         mesh = GeometryBasics.MetaMesh(points, facets; markers)
     end
+    @test testsave(mesh, "mesh")
     result = tetrahedralize(mesh)
     @test result isa Mesh
 
@@ -38,6 +49,7 @@ using Test
     else
         mesh = GeometryBasics.MetaMesh(points, facets)
     end
+    @test testsave(mesh, "mesh")
     result = tetrahedralize(mesh, "vpq1.414a0.1")
     @test result isa Mesh
 
@@ -64,6 +76,7 @@ using Test
     else
         tetmesh = GeometryBasics.MetaMesh(tetpoints, tetfacets)
     end
+    @test testsave(mesh, "tetmesh")
     result = tetrahedralize(tetmesh, "pQqAa0.01")
     @test result isa Mesh
 
@@ -108,6 +121,7 @@ using Test
     else
         mesh = GeometryBasics.MetaMesh(points, facets; markers = markers)
     end
+    @test testsave(mesh, "mesh")
     result = tetrahedralize(mesh, "pQqAa1.0"; holes = [Point{3, Float64}(0, 0, 0)])
     @test result isa Mesh
 
@@ -293,7 +307,9 @@ end
         ]'
     )
 
+    @test testsave(input, "input")
     cinput, x1, x2 = TetGen.CPPTetGenIO(input)
+    @test testsave(cinput, "cinput")
     coutput = tetrahedralize(cinput, "pQa")
 
     @test coutput.numberofpoints == 8

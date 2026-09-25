@@ -15,6 +15,7 @@ using Printf: Printf
 using StaticArrays: StaticArrays, SVector
 using TetGen_jll: TetGen_jll, libtet
 
+
 include("cpptetgenio.jl")
 include("jltetgenio.jl")
 include("rawtetgenio.jl")
@@ -27,5 +28,6 @@ export TetGenError
 export RawTetGenIO, facetlist!, RawFacet
 export numberofpoints, numberoftetrahedra, numberoftrifaces, numberofedges
 export volumemesh, surfacemesh
+export save_tetgen
 
 end # module
