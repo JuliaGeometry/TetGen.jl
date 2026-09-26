@@ -167,7 +167,7 @@ end
 
 Save input (mesh, [`CPPTetGenIO`](@ref), [`JLTetGenIO`](@ref) or  [`RawTetGenIO`](@ref))
 to the files `fstub.node` and `fstub.poly`. These can be read by the tetgen executable and are suited for submission of
-bug reportst to upstream tetgen.
+bug reports to upstream tetgen.
 """
 function save_tetgen end
 
