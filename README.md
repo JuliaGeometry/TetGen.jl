@@ -6,11 +6,30 @@
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaGeometry.github.io/TetGen.jl/dev)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
-The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://wias-berlin.de/software/index.jsp?id=TetGen&lang=1). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tessellation.
+The `TetGen.jl` package is a Julia wrapper for the C++ project [TetGen](https://codeberg.org/TetGen/TetGen). This wrapper enables TetGen based tetrahedral meshing, and (constrained) 3D Delaunay and Voronoi tessellation.
 
 If you find TetGen useful, please consider citing
 Hang Si: "TetGen, a Delaunay-Based Quality Tetrahedral Mesh Generator" ACM Trans. on Mathematical Software. 41 (2), 2015
 [http://doi.acm.org/10.1145/2629697](http://doi.acm.org/10.1145/2629697).
+
+## Supported upstream versions
+By choosing corresponding versions of the [TetGen_jll.jl](https://github.com/JuliaBinaryWrappers/TetGen_jll.jl) binary package,
+it is possible to choose between different TetGen upstream versions:
+
+| TetGen version | TetGen_jll version |
+|:--------------:|:------------------:|
+|     1.5.1      |       1.5.4        |
+|     1.6.1      |       1.6.1        |
+
+By default, the package manager installs version  1.6.1.
+
+## Submitting bug reports
+Bug reports regarding the Julia wrapper can be submitted just by opening an issue in this repo. Please try to attach a minimal
+working example (MWE) to your report.
+
+Bug reports to upstream TetGen (v1.6.1) can be submitted to the [codeberg upstream repository](https://codeberg.org/TetGen/TetGen).
+The `save_tetgen(input, fstub)` converts and writes the Julia input description to a pair of TetGen `.node` and `.poly` files which can serve
+as an MWE.
 
 ## License
 

@@ -10,6 +10,11 @@ struct CFacet{T}
     numberofholes::Cint
 end
 
+"""
+   struct CPPTetGenIO
+
+Julia "mirror" structure to be passed to the C wrapper code.
+"""
 struct CPPTetGenIO{T}
     firstnumber::Cint # 0 or 1, default 0.
     mesh_dim::Cint # must be 3.
@@ -154,4 +159,20 @@ function tetunsuitable!(unsuitable::Function; check_signature = true)
     my_jl_tetunsuitable = unsuitable
     c_wrap_tetunsuitable = @cfunction(jl_wrap_tetunsuitable, Cint, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}))
     return ccall((:tetunsuitable_callback, libtet), Cvoid, (Ptr{Cvoid},), c_wrap_tetunsuitable)
+end
+
+
+"""
+   save_tetgen(input, fstub)
+
+Save input (mesh, [`CPPTetGenIO`](@ref), [`JLTetGenIO`](@ref) or  [`RawTetGenIO`](@ref))
+to the files `fstub.node` and `fstub.poly`. These can be read by the tetgen executable and are suited for submission of
+bug reports to upstream tetgen.
+"""
+function save_tetgen end
+
+function save_tetgen(cinput::CPPTetGenIO{Float64}, fstub::String)
+    ccall((:save_poly, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
+    ccall((:save_nodes, libtet), Cvoid, (CPPTetGenIO{Float64}, Cstring), cinput, fstub)
+    return nothing
 end
