@@ -48,7 +48,6 @@ end
 
 function save_tetgen(mesh, fstub; marker = :markers, holes = Point{3, Float64}[])
     return save_tetgen(JLTetGenIO(mesh; marker, holes), fstub)
-    return true
 end
 
 # JF: probably this case is included in the case above
