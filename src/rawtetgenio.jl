@@ -13,8 +13,7 @@ struct RawFacet{T}
     polygonlist::Array{Array{Cint, 1}, 1}
 
     """
-    `3 x npoints`  array of points given by their coordinates
-    marking polygons describing holes in the facet.
+    `3 x nholes` array of points marking holes in the facet.
     """
     holelist::Array{T, 2}
 end
