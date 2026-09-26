@@ -236,5 +236,5 @@ function cutprism(; vol = 0.05)
 
     input.facetmarkerlist = [1, 2, 3, 3, 3, 4, 5, 6, 7]
     input.regionlist = [-0.1 -0.1 0.1 1 vol;]'
-    return tetrahedralize(input, "p") #aqAQ")
+    return tetrahedralize(input, "paqAQ")
 end
