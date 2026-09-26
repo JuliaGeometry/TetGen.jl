@@ -2,10 +2,11 @@
 
 All notable changes to this project since V1.0 will be documented in this file.
 
-## [3.0.0] - 2026-09-28
+## [3.0.0] - unreleased
 - Update TetGen_jll.jl dependency to 1.6.1 (corresponding to upstream TetGen version 1.6.1). Keep supporting TetGen_jll.jl 
   version 1.5.4 (corresponding to upstream TetGen version 1.5.1)
-- Add `save_tetgen` method to write out tetgen input to allow easy bug reporting to upstream
+- Maintain CI tests for both upstream versions
+- Add `save_tetgen` method to write out tetgen input to suppoirt creation of MWE for upstream bug reports
 
 ## [2.0.2] - 2026-05-11
 - Cap TetGen_jll.jl version to ~1.5.3, to avoid unexpected behavior in CI tests.

@@ -21,7 +21,15 @@ it is possible to choose between different TetGen upstream versions:
 |     1.5.1      |       1.5.4        |
 |     1.6.1      |       1.6.1        |
 
-By default, version 1.6.1 is installed.
+By default, the package manager installs version  1.6.1.
+
+## Submitting bug reports
+Bug reports regarding the Julia wrapper can be submitted just by opening an issue in this repo. Please try to attach a minimal
+working example (MWE) to your report.
+
+Bug reports to upstream TetGen (v1.6.1) can be submitted to the [codeberg upstream repository](https://codeberg.org/TetGen/TetGen).
+The `save_tetgen(input, fstub)` converts and writes the Julia input description to a pair of TetGen `.node` and `.poly` files which can serve
+as an MWE.
 
 ## License
 
