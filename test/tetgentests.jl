@@ -76,7 +76,7 @@ end
     else
         tetmesh = GeometryBasics.MetaMesh(tetpoints, tetfacets)
     end
-    @test testsave(mesh, "tetmesh")
+    @test testsave(tetmesh, "tetmesh")
     result = tetrahedralize(tetmesh, "pQqAa0.01")
     @test result isa Mesh
 
