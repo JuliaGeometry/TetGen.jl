@@ -347,6 +347,6 @@ end
 
 function save_tetgen(input::JLTetGenIO{Float64}, fstub::String)
     cinput = Base.cconvert(CPPTetGenIO{Float64}, input)
-    save_tetgen(cinput[1], fstub)
+    GC.@preserve cinput save_tetgen(cinput[1], fstub)
     return nothing
 end
