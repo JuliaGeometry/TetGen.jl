@@ -14,7 +14,7 @@ TetGen_jll = "b47fdcd6-d2c1-58e9-bbba-c1cee8d8c179"
 [compat]
 DocStringExtensions = "0.8,0.9"
 GeometryBasics = "0.4, 0.5"
-LinearAlgebra = "1"
+LinearAlgebra = "1, < 0.0.1"
 Printf = "1"
 StaticArrays = "1"
 TetGen_jll = "~1.5.3"
