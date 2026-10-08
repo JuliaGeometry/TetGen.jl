@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project since V1.0 will be documented in this file.
 
-## [3.0.0] - unreleased
+## [3.0.0] - 2026-10-08
 - Update TetGen_jll.jl dependency to 1.6.1 (corresponding to upstream TetGen version 1.6.1). Keep supporting TetGen_jll.jl 
   version 1.5.4 (corresponding to upstream TetGen version 1.5.1)
 - Maintain CI tests for both upstream versions
