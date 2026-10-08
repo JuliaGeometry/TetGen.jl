@@ -13,8 +13,7 @@ struct RawFacet{T}
     polygonlist::Array{Array{Cint, 1}, 1}
 
     """
-    Array of points given by their coordinates
-    marking polygons describing holes in the facet.
+    `3 x nholes` array of points marking holes in the facet.
     """
     holelist::Array{T, 2}
 end
@@ -356,6 +355,9 @@ function CPPTetGenIO(tio::RawTetGenIO{T}) where {T}
             polygonlist = Array{CPolygon, 1}(undef, numberofpolygons)
             for ipolygon in 1:numberofpolygons
                 polygonlist[ipolygon] = CPolygon(pointer(facet.polygonlist[ipolygon]), size(facet.polygonlist[ipolygon], 1))
+            end
+            if length(facet.holelist) > 0
+                @assert size(facet.holelist, 1) == 3
             end
             numberofholes = size(facet.holelist, 2)
             push!(polygonlist_array, polygonlist)
@@ -700,8 +702,14 @@ function tetrahedralize(stlfile::String, flags::String)
     return RawTetGenIO(coutput)
 end
 
+function save_tetgen(input::RawTetGenIO{Float64}, fstub::String)
+    cinput, flist, plist = CPPTetGenIO(input)
+    save_tetgen(cinput, fstub)
+    return nothing
+end
+
 """
-$(TYPEDSIGNATURES)
+$(TYPEDSIGNATURES) 
 
 Create GeometryBasics.Mesh from the triface list
 (for quick visualization purposes using Makie's wireframe).
